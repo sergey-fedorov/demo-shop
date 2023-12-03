@@ -28,7 +28,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/api/orders-test")
 public class OrderController {
 
     @Autowired
