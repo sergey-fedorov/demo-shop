@@ -16,6 +16,7 @@ services:
     depends_on:
       - mysqldb
     image: sergfedorov/demo-shop
+    container_name: backend
     restart: always
     build: .
     ports:

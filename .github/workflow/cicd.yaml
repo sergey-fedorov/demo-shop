@@ -1,0 +1,33 @@
+name: CICD
+
+on:
+  push:
+    branches: master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Build Project
+        run: mvn clean install -DskipTests
+      - name: Login to docker hub
+        run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+      - name: Build docker image
+        run: docker build -t sergfedorov/demo-shop .
+      - name: Publish image to docker hub
+        run: docker push sergfedorov/demo-shop:latest
+
+  deploy:
+    needs: build
+    runs-on: ec-2
+    steps:
+      - name: Pull Image from docker hub and restart docker
+        run: sudo docker-compose pull && docker-compose up -d
+        
