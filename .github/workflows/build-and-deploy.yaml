@@ -1,4 +1,4 @@
-name: CICD
+name: Build and Deploy
 
 on:
   push:
@@ -15,7 +15,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Build Project
+      - name: Build project
         run: mvn clean install -DskipTests
       - name: Login to docker hub
         run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
@@ -28,6 +28,6 @@ jobs:
     needs: build
     runs-on: ec-2
     steps:
-      - name: Pull Image from docker hub and restart docker
+      - name: Pull image from docker hub and restart docker
         run: sudo docker compose pull && sudo docker compose up -d
         
