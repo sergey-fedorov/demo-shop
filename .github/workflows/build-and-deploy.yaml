@@ -17,6 +17,7 @@ jobs:
           java-version: '17'
       - name: Build project
         run: mvn clean install -DskipTests
+
       - name: Login to docker hub
         run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
       - name: Build docker image
@@ -24,10 +25,31 @@ jobs:
       - name: Publish image to docker hub
         run: docker push sergfedorov/demo-shop:latest
 
+      - name: Changes
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            docker-compose:
+              - 'docker-compose.yaml'
+      - name: Copy docker-compose.yaml to server
+        if: steps.changes.outputs.docker-compose == 'true'
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: 3.71.78.47
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: 22
+          source: docker-compose.yaml
+          strip_components: 1
+          target: /demo-shop
+
   deploy:
     needs: build
     runs-on: ec-2
     steps:
       - name: Pull image from docker hub and restart docker
-        run: sudo docker compose pull && sudo docker compose up -d
+        run: |
+          cd demo-shop/
+          sudo docker compose pull && sudo docker compose up -d
         
