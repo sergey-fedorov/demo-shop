@@ -47,9 +47,10 @@ jobs:
   deploy:
     needs: build
     runs-on: ec-2
+    env:
+      working-directory demo-shop/
     steps:
       - name: Pull image from docker hub and restart docker
         run: |
-          cd demo-shop/
           sudo docker compose pull && sudo docker compose up -d
         
