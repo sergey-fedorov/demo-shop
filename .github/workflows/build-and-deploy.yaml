@@ -52,5 +52,6 @@ jobs:
     steps:
       - name: Pull image from docker hub and restart docker
         run: |
+          pwd
           sudo docker compose pull && sudo docker compose up -d
         
