@@ -37,8 +37,8 @@ jobs:
         uses: appleboy/scp-action@v0.1.4
         with:
           host: 3.71.78.47
-          username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
+          username: ${{ secrets.EC2_SSH_USER }}
+          password: ${{ secrets.EC2_SSH_PASSWORD }}
           port: 22
           source: docker-compose.yaml
           target: /
