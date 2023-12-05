@@ -20,6 +20,9 @@ public class Customer {
     @NotBlank(message = "Full name is required")
     private String fullName;
 
+    @NotBlank(message = "Address is required")
+    private String address;
+
     @Column(unique = true)
     @NotBlank(message = "Email is required")
     private String email;

@@ -88,28 +88,8 @@ public class OrderController {
 
        orderService.update(order);
 
-        String uri = ServletUriComponentsBuilder
-          .fromCurrentServletMapping()
-          .path("/orders/{id}")
-          .buildAndExpand(order.getId())
-          .toString();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", uri);
-
-        return new ResponseEntity<>(order, headers, HttpStatus.CREATED);
+       return new ResponseEntity<>(order, HttpStatus.CREATED);
     }
-
-    private void validateProductsExistence(List<OrderItemDto> orderItemDtos) {
-        List<OrderItemDto> list = orderItemDtos
-          .stream()
-          .filter(op -> Objects.isNull(productService.getProduct(op.getProductId())))
-          .collect(Collectors.toList());
-
-        if (!CollectionUtils.isEmpty(list)) {
-            throw new ResourceNotFoundException("Product not found");
-        }
-    }
-
 
     @PostMapping("/status")
     public ResponseEntity<Order> updateOrderStatus(@RequestBody OrderRequest orderRequest){
@@ -120,6 +100,17 @@ public class OrderController {
         order.setStatus(OrderStatus.DELIVERED.name());
         orderService.update(order);
         return new ResponseEntity<>(order, HttpStatus.OK);
+    }
+
+    private void validateProductsExistence(List<OrderItemDto> orderItemDtos) {
+        List<OrderItemDto> list = orderItemDtos
+                .stream()
+                .filter(op -> Objects.isNull(productService.getProduct(op.getProductId())))
+                .collect(Collectors.toList());
+
+        if (!CollectionUtils.isEmpty(list)) {
+            throw new ResourceNotFoundException("Product not found");
+        }
     }
 
 

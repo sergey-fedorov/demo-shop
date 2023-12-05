@@ -28,7 +28,10 @@ public class CustomerController {
 
     @PostMapping
     public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer){
-        String emailValidationResult = emailValidator(customer.getEmail());
+        RestTemplate restTemplate = new RestTemplate();
+        EmailValidatorDto validatorDto = restTemplate.getForObject(emailValidatorService + customer.getEmail(), EmailValidatorDto.class);
+
+        String emailValidationResult = emailValidator(validatorDto);
         if (!emailValidationResult.isEmpty())
             throw new BadRequestException(emailValidationResult);
 
@@ -37,10 +40,7 @@ public class CustomerController {
 
     }
 
-    public String emailValidator(String email){
-        RestTemplate restTemplate = new RestTemplate();
-        EmailValidatorDto validatorDto = restTemplate.getForObject(emailValidatorService + email, EmailValidatorDto.class);
-
+    public String emailValidator(EmailValidatorDto validatorDto){
         if(validatorDto == null)
             throw new BadRequestException("Email validator service error");
         if (!validatorDto.isFormat())
