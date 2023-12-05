@@ -25,7 +25,7 @@ jobs:
       - name: Publish image to docker hub
         run: docker push sergfedorov/demo-shop:latest
 
-      - name: Changes
+      - name: Check if docker-compose.yaml updated
         uses: dorny/paths-filter@v2
         id: changes
         with:
