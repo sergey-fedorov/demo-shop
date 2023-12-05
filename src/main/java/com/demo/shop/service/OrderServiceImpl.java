@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.StreamSupport;
 
 @Service
 @Transactional
@@ -19,8 +21,9 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public Iterable<Order> getAllOrders() {
-        return this.orderRepository.findAll();
+    public List<Order> getAllOrders() {
+        Iterable<Order> orderIterable = orderRepository.findAll();
+        return StreamSupport.stream(orderIterable.spliterator(), false).toList();
     }
 
     @Override
@@ -44,4 +47,6 @@ public class OrderServiceImpl implements OrderService {
     public void update(Order order) {
         this.orderRepository.save(order);
     }
+
+
 }

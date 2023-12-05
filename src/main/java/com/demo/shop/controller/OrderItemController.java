@@ -37,8 +37,8 @@ public class OrderItemController {
             throw new ForbiddenException("Order doesn't belong to specified customer");
 
         String orderStatus = order.getStatus();
-        if (!(orderStatus.equals(OrderStatus.NEW.name()) || orderStatus.equals(OrderStatus.PAYMENT_FAILED.name())))
-            throw new BadRequestException("Cannot remove item from the paid or payment pending order");
+        if (!orderStatus.equals(OrderStatus.NEW.name()))
+            throw new BadRequestException("Cannot remove item from a not new order");
 
         OrderItemPK orderItemPK = new OrderItemPK();
         orderItemPK.setOrder(order);
@@ -58,11 +58,11 @@ public class OrderItemController {
             throw new ForbiddenException("Order doesn't belong to specified customer");
 
         String orderStatus = order.getStatus();
-        if (!(orderStatus.equals(OrderStatus.NEW.name()) || orderStatus.equals(OrderStatus.PAYMENT_FAILED.name())))
-            throw new BadRequestException("Cannot add item to the paid or payment pending order");
+        if (!orderStatus.equals(OrderStatus.NEW.name()))
+            throw new BadRequestException("Cannot add item to a not new order");
 
-        long productsInOrderCount = order.getOrderItems().stream().filter(oi -> oi.getProduct().getId().equals(orderItemForm.getProductId())).count();
-        if (productsInOrderCount > 0)
+        boolean doesProductExistInOrder = order.getOrderItems().stream().anyMatch(oi -> oi.getProduct().getId().equals(orderItemForm.getProductId()));
+        if (doesProductExistInOrder)
             throw new BadRequestException("Cannot add item with product that already added to order");
 
         OrderItem orderItem = new OrderItem(order, productService.getProduct(orderItemForm.getProductId()), orderItemForm.getQuantity());

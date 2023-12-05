@@ -42,8 +42,14 @@ public class OrderController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public @NotNull Iterable<Order> list() {
-        return this.orderService.getAllOrders();
+    public @NotNull List<Order> list(@RequestParam(required = false) String status) {
+        if (status != null && !status.isEmpty()) {
+            return orderService.getAllOrders()
+                    .stream().filter(
+                            order -> order.getStatus().equalsIgnoreCase(status)
+                    ).toList();
+        }
+        return orderService.getAllOrders();
     }
 
     @GetMapping("/{id}")
@@ -104,10 +110,28 @@ public class OrderController {
         }
     }
 
+
+    @PostMapping("/status")
+    public ResponseEntity<Order> updateOrderStatus(@RequestBody OrderRequest orderRequest){
+        Order order = orderService.get(orderRequest.getOrderId());
+        if (!order.getStatus().equals(OrderStatus.PAYMENT_SUCCEEDED.name()))
+            throw new BadRequestException("Cannot update status for a not paid order");
+
+        order.setStatus(OrderStatus.DELIVERED.name());
+        orderService.update(order);
+        return new ResponseEntity<>(order, HttpStatus.OK);
+    }
+
+
     @Data
     public static class OrderForm {
         private long customerId;
         private List<OrderItemDto> orderItems;
 
+    }
+
+    @Data
+    public static class OrderRequest {
+        private long orderId;
     }
 }
