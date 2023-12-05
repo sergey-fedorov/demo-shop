@@ -23,5 +23,3 @@ services:
       - "8081:8081"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/db_shop
-
-#test4
