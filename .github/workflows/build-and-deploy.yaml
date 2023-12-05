@@ -48,7 +48,7 @@ jobs:
     needs: build
     runs-on: ec-2
     env:
-      working-directory: demo-shop/
+      working-directory: /home/ubuntu/demo-shop
     steps:
       - name: Pull image from docker hub and restart docker
         run: |
