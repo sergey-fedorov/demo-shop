@@ -22,11 +22,6 @@ public class OrderItemServiceImpl implements OrderItemService {
     }
 
     @Override
-    public OrderItem get(OrderItemPK orderItemPK) {
-        return null;
-    }
-
-    @Override
     public void delete(OrderItemPK orderItemPK) {
         this.orderItemRepository.deleteById(orderItemPK);
     }

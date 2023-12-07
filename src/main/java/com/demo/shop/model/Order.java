@@ -3,16 +3,17 @@ package com.demo.shop.model;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "orders")
+@Entity @Table(name = "orders") @Data
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="orderItems")
-@Data
+@Builder @NoArgsConstructor @AllArgsConstructor
 public class Order {
 
     @Id
@@ -24,6 +25,7 @@ public class Order {
 
     private String status;
 
+    // null is default value for db
     private Long transactionId = null;
 
 
@@ -34,7 +36,7 @@ public class Order {
 
     @OneToMany(mappedBy = "pk.order")
     @Valid
-    private List<OrderItem> orderItems = new ArrayList<>();
+    private List<OrderItem> orderItems;
 
     @Transient
     public Double getTotalOrderPrice() {

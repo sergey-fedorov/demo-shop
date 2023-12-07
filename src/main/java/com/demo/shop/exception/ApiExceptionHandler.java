@@ -14,6 +14,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
@@ -33,7 +34,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorItem> handle(ConstraintViolationException e) {
         ErrorItem errorItem = new ErrorItem();
-        String validationMessages = e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).toList().toString();
+        String validationMessages = e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(", "));
         errorItem.setErrorMessage(validationMessages);
         return new ResponseEntity<>(errorItem, HttpStatus.BAD_REQUEST);
     }

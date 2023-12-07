@@ -12,7 +12,5 @@ public interface OrderItemService {
 
     OrderItem create(@NotNull(message = "The products for order cannot be null.") @Valid OrderItem orderProduct);
 
-    OrderItem get(OrderItemPK orderItemPK);
-
     void delete(OrderItemPK orderItemPK);
 }

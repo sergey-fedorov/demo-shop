@@ -2,8 +2,10 @@ package com.demo.shop.controller;
 
 import com.demo.shop.exception.BadRequestException;
 import com.demo.shop.dto.EmailValidatorDto;
+import com.demo.shop.exception.ResourceNotFoundException;
 import com.demo.shop.model.Customer;
-import com.demo.shop.service.CustomerService;
+import com.demo.shop.repository.CustomerRepository;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -19,26 +21,31 @@ public class CustomerController {
     private String emailValidatorService;
 
     @Autowired
-    CustomerService customerService;
+    CustomerRepository customerRepository;
 
     @GetMapping("/{id}")
-    public Customer getCustomer(@PathVariable("id") final long id) {
-        return customerService.get(id);
+    public Customer getCustomer(@PathVariable("id") @NotNull final Long id) {
+        return customerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
     }
 
     @PostMapping
     public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer){
-        RestTemplate restTemplate = new RestTemplate();
-        EmailValidatorDto validatorDto = restTemplate.getForObject(emailValidatorService + customer.getEmail(), EmailValidatorDto.class);
+        String email = customer.getEmail();
+        if (email == null || email.trim().isEmpty())
+            throw new BadRequestException("Email is required");
+
+        EmailValidatorDto validatorDto =
+                new RestTemplate().getForObject(emailValidatorService + customer.getEmail(), EmailValidatorDto.class);
 
         String emailValidationResult = emailValidator(validatorDto);
         if (!emailValidationResult.isEmpty())
             throw new BadRequestException(emailValidationResult);
 
-        customerService.create(customer);
+        customerRepository.save(customer);
         return new ResponseEntity<>(customer, HttpStatus.CREATED);
-
     }
+
 
     public String emailValidator(EmailValidatorDto validatorDto){
         if(validatorDto == null)
