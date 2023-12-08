@@ -13,7 +13,6 @@ import au.com.dius.pact.core.model.annotations.PactDirectory;
 import com.demo.shop.business.steps.OrderSteps;
 import com.demo.shop.core.RequestSpecificationFactory;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
@@ -22,7 +21,7 @@ import java.util.Objects;
 
 @PactConsumerTest
 @PactDirectory("src/test/resources/pacts")
-public class DeliveryServiceConsumerPactTest {
+public class DeliveryConsumerPactTest {
 
 
     @Pact(provider = "orders_provider", consumer = "delivery_consumer")
@@ -67,9 +66,9 @@ public class DeliveryServiceConsumerPactTest {
                 .uponReceiving("Update order status in api-orders")
                 .path("/api/orders/status")
                 .headers(Map.of("Content-Type", "application/json"))
-//                .body(new JSONObject().put("orderId", 1))
-                .body(new PactDslJsonBody()
-                        .valueFromProviderState("orderId", "orderId", 1))
+//                .body(new JSONObject().put("orderId", 111))
+                // To rewrite value in provider test
+                .body(new PactDslJsonBody().valueFromProviderState("orderId", "orderId", 1))
                 .method("POST")
                 .willRespondWith()
                 .status(200)
@@ -86,7 +85,7 @@ public class DeliveryServiceConsumerPactTest {
         OrderSteps orderSteps = new OrderSteps();
         RequestSpecificationFactory.mock(mockServer.getUrl(), mockServer.getPort());
 
-        orderSteps.when_updateStatus(1L);
+        orderSteps.when_updateStatus(111L);
         orderSteps.then_validateStatusCode(HttpStatus.OK);
     }
 

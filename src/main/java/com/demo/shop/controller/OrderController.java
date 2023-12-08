@@ -12,6 +12,7 @@ import com.demo.shop.service.CustomerService;
 import com.demo.shop.service.OrderItemService;
 import com.demo.shop.service.OrderService;
 import com.demo.shop.service.ProductService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +93,7 @@ public class OrderController {
     }
 
     @PostMapping("/status")
-    public ResponseEntity<Order> updateOrderStatus(@RequestBody OrderRequest orderRequest){
+    public ResponseEntity<Order> updateOrderStatus(@Valid @RequestBody OrderRequest orderRequest){
         Order order = orderService.get(orderRequest.getOrderId());
         if (!order.getStatus().equals(OrderStatus.PAYMENT_SUCCEEDED.name()))
             throw new BadRequestException("Cannot update status for a not paid order");
@@ -123,6 +124,7 @@ public class OrderController {
 
     @Data
     public static class OrderRequest {
-        private long orderId;
+        @NotNull
+        private Long orderId;
     }
 }

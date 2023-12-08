@@ -22,8 +22,8 @@ public class E2ETests {
     OrderModel orderModelReq = OrderModel.builder()
             .customerId(1L)
             .orderItems(List.of(
-                    OrderItemModel.builder().productId(1).quantity(10).build(),
-                    OrderItemModel.builder().productId(2).quantity(20).build())
+                    OrderItemModel.builder().productId(1L).quantity(10).build(),
+                    OrderItemModel.builder().productId(2L).quantity(20).build())
             )
             .build();
 

@@ -21,7 +21,7 @@ import java.util.Map;
 
 @Provider("orders_provider")
 @PactFolder("src/test/resources/pacts")
-public class OrdersServiceProviderPactTest {
+public class OrdersProviderPactTestReal {
 
    /* Using running service */
 
@@ -51,7 +51,7 @@ public class OrdersServiceProviderPactTest {
 
         OrderModel orderModelReq = OrderModel.builder()
                 .customerId(1L)
-                .orderItems(List.of(OrderItemModel.builder().productId(1).quantity(10).build()))
+                .orderItems(List.of(OrderItemModel.builder().productId(1L).quantity(10).build()))
                 .build();
 
         OrderModel orderRes = orderSteps.when_createOrder(orderModelReq);

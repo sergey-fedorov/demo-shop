@@ -8,6 +8,7 @@ import lombok.Data;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
@@ -73,6 +74,14 @@ public class ApiExceptionHandler {
         ErrorItem error = new ErrorItem();
         error.setErrorMessage(e.getMessage());
         return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorItem> handle(MethodArgumentNotValidException e) {
+        String validationMessages = e.getBindingResult().getFieldErrors().stream().map(ve -> ve.getField() + " " + ve.getDefaultMessage()).collect(Collectors.joining(", "));
+        ErrorItem error = new ErrorItem();
+        error.setErrorMessage(validationMessages);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @Data
