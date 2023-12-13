@@ -13,10 +13,15 @@ import io.restassured.specification.RequestSpecification;
 
 public abstract class RequestSpecificationFactory {
 
-    private static String baseUri = "http://localhost";
-    private static final int DEFAULT_PORT = 8081;
+    private static String baseUri = PropertiesReader.getProperty("server.address");
+    private static final int DEFAULT_PORT = Integer.parseInt(PropertiesReader.getProperty("server.port"));
 
     private static RequestSpecification requestSpecification;
+
+    public static void setBaseUri(String baseUri) {
+        if (baseUri != null)
+            RequestSpecificationFactory.baseUri = baseUri;
+    }
 
     public static RequestSpecification getBaseRequestSpecification(){
         if (requestSpecification == null){

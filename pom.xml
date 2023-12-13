@@ -16,6 +16,26 @@
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+	<profiles>
+		<profile>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<id>local</id>
+			<properties>
+				<base.uri>http://localhost</base.uri>
+			</properties>
+		</profile>
+		<profile>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<id>remote</id>
+			<properties>
+				<base.uri>http://3.71.78.47</base.uri>
+			</properties>
+		</profile>
+	</profiles>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -131,6 +151,11 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.2.2</version>
+				<configuration>
+					<systemPropertyVariables>
+						<base.uri>${base.uri}</base.uri>
+					</systemPropertyVariables>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

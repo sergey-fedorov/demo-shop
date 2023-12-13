@@ -79,5 +79,5 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       - name: Execute E2E tests
-        run: mvn '-Dtest=com.demo.shop.tests.e2e.*Tests' test
+        run: mvn '-Dtest=com.demo.shop.tests.e2e.*Tests' test -P remote
         

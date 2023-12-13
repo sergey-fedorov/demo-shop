@@ -6,6 +6,7 @@ import com.demo.shop.business.models.PaymentModel;
 import com.demo.shop.business.steps.DeliverySteps;
 import com.demo.shop.business.steps.OrderSteps;
 import com.demo.shop.business.steps.PaymentSteps;
+import com.demo.shop.core.BaseTest;
 import com.demo.shop.model.OrderStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,7 @@ import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
-public class E2ETests {
+public class E2ETests extends BaseTest {
 
     OrderSteps orderSteps = new OrderSteps();
     PaymentSteps paymentSteps = new PaymentSteps();
