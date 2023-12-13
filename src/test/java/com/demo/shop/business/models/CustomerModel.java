@@ -17,7 +17,7 @@ public class CustomerModel {
     private String address;
     private String email;
 
-    public CustomerModel getFake(){
+    public static CustomerModel getFake(){
         Faker faker = new Faker();
         return CustomerModel.builder()
                 .fullName(faker.name().fullName())

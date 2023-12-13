@@ -56,6 +56,7 @@ public class DeliveryConsumerPactTest {
 
         orderSteps.when_getOrderListByStatus("PAYMENT_SUCCEEDED");
         orderSteps.then_validateStatusCode(HttpStatus.OK);
+        RequestSpecificationFactory.unMock();
     }
 
 
@@ -87,6 +88,7 @@ public class DeliveryConsumerPactTest {
 
         orderSteps.when_updateStatus(111L);
         orderSteps.then_validateStatusCode(HttpStatus.OK);
+        RequestSpecificationFactory.unMock();
     }
 
 }

@@ -4,70 +4,82 @@ import com.demo.shop.controller.CustomerController;
 import com.demo.shop.dto.EmailValidatorDto;
 import com.demo.shop.exception.ResourceNotFoundException;
 import com.demo.shop.model.Customer;
-import com.demo.shop.repository.CustomerRepository;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
+import com.demo.shop.service.CustomerService;
+import com.demo.shop.service.EmailValidatorService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-import java.util.Optional;
-
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
+
+@WebMvcTest(CustomerController.class)
 public class CustomerControllerTest {
 
-    @Value("${email.validator.service}")
-    private String emailValidatorService;
+    @Autowired
+    MockMvc mockMvc;
+    @MockBean
+    CustomerService customerService;
+    @MockBean
+    EmailValidatorService emailValidatorService;
 
-    @InjectMocks
-    CustomerController customerController;
 
-    @Mock
-    CustomerRepository customerRepository;
-
-    @Mock
-    RestTemplate restTemplate;
+    Customer customer = Customer.builder()
+            .id(1L)
+            .email("testname@email.com")
+            .address("City")
+            .fullName("Test Name")
+            .build();
 
     @Test
-    public void shouldReturnCustomerDetails(){
-        Customer customer = Customer.builder()
-                .id(1L)
-                .email("em@gmail.com")
-                .address("adr")
-                .fullName("nm")
-                .build();
+    public void shouldReturnCustomerDetails() throws Exception {
+        when(customerService.get(anyLong())).thenReturn(customer);
 
-        when(customerRepository.findById(customer.getId())).thenReturn(Optional.of(customer));
-        Assertions.assertEquals(customer, customerController.getCustomer(customer.getId()));
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/api/customers/1");
+
+        mockMvc.perform(requestBuilder)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.email").value("testname@email.com"))
+                .andExpect(jsonPath("$.address").value("City"))
+                .andExpect(jsonPath("$.fullName").value("Test Name"));
+
+        requestBuilder = MockMvcRequestBuilders
+                .get("/api/customers/abc");
+
+        mockMvc.perform(requestBuilder)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isBadRequest());
+    }
+
+
+    @Test
+    public void shouldReturnBadRequest() throws Exception {
+
+        when(customerService.get(anyLong())).thenThrow(ResourceNotFoundException.class);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/api/customers/1");
+
+        mockMvc.perform(requestBuilder)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isNotFound());
     }
 
     @Test
-    public void shouldReturnCustomerNotFound(){
-        ResourceNotFoundException exception = Assertions.assertThrows(
-                ResourceNotFoundException.class,
-                () -> customerController.getCustomer(1L),
-                "Not expected exception thrown"
-        );
-        Assertions.assertEquals("Customer not found", exception.getMessage());
-    }
-
-    /* WIP */
-    @Test @Disabled
-    public void shouldCreateCustomerAndReturnDetails(){
-        Customer customer = Customer.builder()
-                .email("em@gmail.com")
-                .address("adr")
-                .fullName("nm")
-                .build();
-
+    public void shouldCreateNewCustomer() throws Exception {
         EmailValidatorDto emailValidatorDto = EmailValidatorDto.builder()
                 .format(true)
                 .domain("example.com")
@@ -75,12 +87,21 @@ public class CustomerControllerTest {
                 .dns(true)
                 .build();
 
-        when(restTemplate.getForEntity("https://www.disify.com/api/email/example.com", EmailValidatorDto.class))
-                .thenReturn(new ResponseEntity<>(emailValidatorDto, HttpStatus.OK));
+        when(emailValidatorService.request(customer.getEmail())).thenReturn(emailValidatorDto);
+        when(customerService.create(customer)).thenReturn(customer);
 
-        when(customerRepository.save(customer)).thenReturn(customer.setId(1L));
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/customers")
+                .content(new ObjectMapper().writeValueAsString(customer))
+                .contentType(MediaType.APPLICATION_JSON);
 
-        Assertions.assertEquals(customer.setId(1L), customerController.createCustomer(customer).getBody());
+        mockMvc.perform(requestBuilder)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.email").value("testname@email.com"))
+                .andExpect(jsonPath("$.address").value("City"))
+                .andExpect(jsonPath("$.fullName").value("Test Name"));
     }
 
 }

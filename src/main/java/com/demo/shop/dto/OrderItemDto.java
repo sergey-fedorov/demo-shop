@@ -1,8 +1,9 @@
 package com.demo.shop.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
-@Data
+@Data @Builder
 public class OrderItemDto {
 
     private long productId;

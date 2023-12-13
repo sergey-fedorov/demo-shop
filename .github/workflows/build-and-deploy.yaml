@@ -15,6 +15,13 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+
+      - name: Execute unit tests
+        run: mvn '-Dtest=com.demo.shop.tests.unit.*Test' test
+
+      - name: Execute integration tests
+        run: mvn '-Dtest=com.demo.shop.tests.integaration.*Tests' test
+
       - name: Build project
         run: mvn clean install -DskipTests
 
@@ -49,4 +56,11 @@ jobs:
     steps:
       - name: Pull image from docker hub and restart docker
         run: sudo docker compose pull && sudo docker compose up -d
+
+  E2E_tests:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Execute E2E tests
+        run: mvn '-Dtest=com.demo.shop.tests.e2e.*Tests' test
         

@@ -7,12 +7,11 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.List;
+import java.util.Objects;
 
-@Entity @Table(name = "customers") @Data @Accessors(chain = true) @EqualsAndHashCode
+@Entity @Table(name = "customers") @Data @Accessors(chain = true)
 @Builder @NoArgsConstructor @AllArgsConstructor
 public class Customer {
-
-
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,5 +30,16 @@ public class Customer {
     @JsonIgnore @OneToMany(mappedBy = "customer")
     List<Order> orders;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Customer customer = (Customer) o;
+        return fullName.equals(customer.fullName) && address.equals(customer.address) && email.equals(customer.email);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(fullName, address, email);
+    }
 }

@@ -1,6 +1,7 @@
 package com.demo.shop.controller;
 
 
+import com.demo.shop.dto.OrderFormDto;
 import com.demo.shop.dto.OrderItemDto;
 import com.demo.shop.exception.BadRequestException;
 import com.demo.shop.exception.ResourceNotFoundException;
@@ -15,8 +16,8 @@ import com.demo.shop.service.ProductService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/orders")
+@NoArgsConstructor
 public class OrderController {
 
     @Autowired
@@ -59,7 +61,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<Order> create(@RequestBody OrderForm form) {
+    public ResponseEntity<Order> create(@RequestBody OrderFormDto form) {
         List<OrderItemDto> formDtos = form.getOrderItems();
         validateProductsExistence(formDtos);
 
@@ -112,14 +114,6 @@ public class OrderController {
         if (!CollectionUtils.isEmpty(list)) {
             throw new ResourceNotFoundException("Product not found");
         }
-    }
-
-
-    @Data
-    public static class OrderForm {
-        private long customerId;
-        private List<OrderItemDto> orderItems;
-
     }
 
     @Data

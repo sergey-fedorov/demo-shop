@@ -1,4 +1,4 @@
-package com.demo.shop;
+package com.demo.shop.tests.e2e;
 
 import com.demo.shop.business.models.CustomerModel;
 import com.demo.shop.business.steps.CustomerSteps;
@@ -17,7 +17,7 @@ public class CustomerTests extends BaseTest {
 
     @Test
     public void newCustomerCreatedWithValidDetails(){
-        CustomerModel customerReqBody = new CustomerModel().getFake();
+        CustomerModel customerReqBody = CustomerModel.getFake();
 
         CustomerModel customerResBody = customerSteps.when_createCustomer(customerReqBody);
         customerSteps.then_validateStatusCode(HttpStatus.CREATED);
@@ -29,17 +29,17 @@ public class CustomerTests extends BaseTest {
 
     @Test
     public void cannotCreateCustomerWithEmptyFields(){
-        CustomerModel customerReqBody = new CustomerModel().getFake()
+        CustomerModel customerReqBody = CustomerModel.getFake()
                 .setFullName("");
         customerSteps.when_createCustomer(customerReqBody);
         customerSteps.then_validateErrorResponse(HttpStatus.BAD_REQUEST, "Full name is required");
 
-        customerReqBody = new CustomerModel().getFake()
+        customerReqBody = CustomerModel.getFake()
                 .setAddress("");
         customerSteps.when_createCustomer(customerReqBody);
         customerSteps.then_validateErrorResponse(HttpStatus.BAD_REQUEST, "Address is required");
 
-        customerReqBody = new CustomerModel().getFake()
+        customerReqBody = CustomerModel.getFake()
                 .setEmail("");
         customerSteps.when_createCustomer(customerReqBody);
         customerSteps.then_validateErrorResponse(HttpStatus.BAD_REQUEST, "Email is required");
@@ -47,7 +47,7 @@ public class CustomerTests extends BaseTest {
 
     @Test
     public void cannotCreateCustomerWithExistingEmail(){
-        CustomerModel customerReqBody = new CustomerModel().getFake();
+        CustomerModel customerReqBody = CustomerModel.getFake();
         customerSteps.when_createCustomer(customerReqBody);
         customerSteps.when_createCustomer(customerReqBody);
         customerSteps.then_validateErrorResponse(HttpStatus.BAD_REQUEST, "Entry already exists");
