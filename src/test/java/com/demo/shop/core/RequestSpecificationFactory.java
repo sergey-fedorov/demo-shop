@@ -13,7 +13,7 @@ import io.restassured.specification.RequestSpecification;
 
 public abstract class RequestSpecificationFactory {
 
-    private static String baseUri = PropertiesReader.getProperty("local.address");
+    private static String baseUri = PropertiesReader.getProperty("server.address");
     private static final int DEFAULT_PORT = Integer.parseInt(PropertiesReader.getProperty("server.port"));
 
     private static RequestSpecification requestSpecification;

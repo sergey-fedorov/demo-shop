@@ -1,11 +1,7 @@
 package com.demo.shop.tests.e2e;
 
-import com.demo.shop.business.models.OrderItemModel;
-import com.demo.shop.business.models.OrderModel;
-import com.demo.shop.business.models.PaymentModel;
-import com.demo.shop.business.steps.DeliverySteps;
-import com.demo.shop.business.steps.OrderSteps;
-import com.demo.shop.business.steps.PaymentSteps;
+import com.demo.shop.business.models.*;
+import com.demo.shop.business.steps.*;
 import com.demo.shop.core.BaseTest;
 import com.demo.shop.model.OrderStatus;
 import org.junit.jupiter.api.Assertions;
@@ -19,17 +15,23 @@ public class E2ETests extends BaseTest {
     OrderSteps orderSteps = new OrderSteps();
     PaymentSteps paymentSteps = new PaymentSteps();
     DeliverySteps deliverySteps = new DeliverySteps();
-
-    OrderModel orderModelReq = OrderModel.builder()
-            .customerId(1L)
-            .orderItems(List.of(
-                    OrderItemModel.builder().productId(1L).quantity(10).build(),
-                    OrderItemModel.builder().productId(2L).quantity(20).build())
-            )
-            .build();
+    CustomerSteps customerSteps = new CustomerSteps();
+    ProductSteps productSteps = new ProductSteps();
 
     @Test
     public void createPayDeliverOrderE2E(){
+        Long customerId = customerSteps.when_createCustomer(CustomerModel.getFake()).getId();
+        Long productId1 = productSteps.when_createProduct(ProductModel.getFake()).getId();
+        Long productId2 = productSteps.when_createProduct(ProductModel.getFake()).getId();
+
+        OrderModel orderModelReq = OrderModel.builder()
+                .customerId(customerId)
+                .orderItems(List.of(
+                        OrderItemModel.builder().productId(productId1).quantity(2).build(),
+                        OrderItemModel.builder().productId(productId2).quantity(4).build())
+                )
+                .build();
+
         OrderModel orderRes = orderSteps.when_createOrder(orderModelReq);
         orderSteps.then_validateStatusCode(HttpStatus.CREATED);
         Long orderId = orderRes.getId();
