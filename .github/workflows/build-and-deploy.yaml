@@ -5,7 +5,8 @@ on:
     branches: master
 
 jobs:
-  build:
+
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
@@ -15,13 +16,22 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-
       - name: Execute unit tests
         run: mvn '-Dtest=com.demo.shop.tests.unit.*Test' test
-
       - name: Execute integration tests
         run: mvn '-Dtest=com.demo.shop.tests.integaration.*Tests' test
 
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
       - name: Build project
         run: mvn clean install -DskipTests
 
@@ -57,10 +67,17 @@ jobs:
       - name: Pull image from docker hub and restart docker
         run: sudo docker compose pull && sudo docker compose up -d
 
-  E2E_tests:
+  e2e_test:
     needs: deploy
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
       - name: Execute E2E tests
         run: mvn '-Dtest=com.demo.shop.tests.e2e.*Tests' test
         
