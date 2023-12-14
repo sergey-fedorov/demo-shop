@@ -26,6 +26,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(CustomerController.class)
 public class CustomerControllerTest {
 
+    /* @WebMvcTest is limited to a single controller and is used in combination
+     with @MockBean to provide mock implementations for required collaborators.
+
+     @WebMvcTest also auto-configures MockMvc. Mock MVC offers a powerful way to
+     quickly test MVC controllers without needing to start a full HTTP server.
+
+     Auto-configure MockMvc in a non-@WebMvcTest (such as @SpringBootTest)
+     by annotating it with @AutoConfigureMockMvc.*/
+
     @Autowired
     MockMvc mockMvc;
     @MockBean

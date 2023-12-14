@@ -24,7 +24,7 @@ import java.util.*;
 @RunWith(PactRunner.class)
 @Provider("orders_provider")
 @PactFolder("src/test/resources/pacts")
-public class OrderProviderPactTestMockTestModel {
+public class ProviderOrdersServiceTestMockTestModel {
 
     /* Using mock service with test model
     * Issue with OrderModel builder: Could not write JSON: Infinite recursion

@@ -19,7 +19,7 @@ jobs:
       - name: Execute unit tests
         run: mvn '-Dtest=com.demo.shop.tests.unit.*Test' test
       - name: Execute integration tests
-        run: mvn '-Dtest=com.demo.shop.tests.integaration.*Tests' test
+        run: mvn '-Dtest=com.demo.shop.tests.integration.*Tests' test
 
   build:
     needs: test

@@ -20,18 +20,6 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
-    public ResponseEntity<ErrorResponse> handle2(ConstraintViolationException e) {
-        ErrorResponse errors = new ErrorResponse();
-        for (ConstraintViolation violation : e.getConstraintViolations()) {
-            ErrorItem error = new ErrorItem();
-            error.setErrorCode(violation.getMessageTemplate());
-            error.setErrorMessage(violation.getMessage());
-            errors.addError(error);
-        }
-
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-    }
-
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorItem> handle(ConstraintViolationException e) {
         ErrorItem errorItem = new ErrorItem();

@@ -1,4 +1,4 @@
-package com.demo.shop.tests.integaration;
+package com.demo.shop.tests.integration;
 
 import com.demo.shop.model.Customer;
 import com.demo.shop.model.Order;

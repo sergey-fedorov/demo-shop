@@ -21,7 +21,7 @@ import java.util.Objects;
 
 @PactConsumerTest
 @PactDirectory("src/test/resources/pacts")
-public class DeliveryConsumerPactTest {
+public class ConsumerDeliveryServiceTest {
 
 
     @Pact(provider = "orders_provider", consumer = "delivery_consumer")
@@ -50,7 +50,7 @@ public class DeliveryConsumerPactTest {
 
     @Test
     @PactTestFor(pactMethod = "getPaidOrders", pactVersion = PactSpecVersion.V3)
-    void testTetPaidOrders(MockServer mockServer) {
+    void testGetPaidOrders(MockServer mockServer) {
         OrderSteps orderSteps = new OrderSteps();
         RequestSpecificationFactory.mock(mockServer.getUrl(), mockServer.getPort());
 

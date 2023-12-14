@@ -21,7 +21,7 @@ import java.util.Map;
 
 @Provider("orders_provider")
 @PactFolder("src/test/resources/pacts")
-public class OrdersProviderPactTestReal {
+public class ProviderOrdersServiceTestReal {
 
    /* Using running service */
 

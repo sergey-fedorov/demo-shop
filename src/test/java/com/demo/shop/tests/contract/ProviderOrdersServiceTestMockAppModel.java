@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 @RunWith(PactRunner.class)
 @Provider("orders_provider")
 @PactFolder("src/test/resources/pacts")
-public class OrderProviderPactTestMockAppModel {
+public class ProviderOrdersServiceTestMockAppModel {
 
     /* Using mock service with app model
      * How to return Order with all field?
