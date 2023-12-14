@@ -12,12 +12,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @WireMockTest(httpPort = 8181)
+@Testcontainers
 public class EmailValidatorServiceIntegrationTests {
+
+    /* How to run without DB connection, like CustomerController?
+    Using @WebMvcTest(CustomerController.class) triggers error with context */
 
     @Autowired
     EmailValidatorService emailValidatorService;
@@ -25,10 +32,16 @@ public class EmailValidatorServiceIntegrationTests {
     static String emailValidatorServiceMock = "http://localhost:8181";
     ObjectMapper mapper = new ObjectMapper();
 
+    @Container
+    static MySQLContainer mySQLContainer = new MySQLContainer<>("mysql:8.1.0");
 
     @DynamicPropertySource
     static void dynamicConfiguration(DynamicPropertyRegistry registry) {
         registry.add("email.validator.service", () -> emailValidatorServiceMock);
+        registry.add("spring.datasource.url", mySQLContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", mySQLContainer::getUsername);
+        registry.add("spring.datasource.password", mySQLContainer::getPassword);
+
     }
 
     @Test
