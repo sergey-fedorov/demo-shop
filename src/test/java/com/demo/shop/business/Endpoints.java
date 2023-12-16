@@ -8,6 +8,7 @@ public class Endpoints {
         public static final String ORDERS = BASE_URI;
         public static final String ORDER_BY_ID = BASE_URI + "/{id}";
         public static final String STATUS = BASE_URI + "/status";
+        public static final String PAY = BASE_URI + "/pay";
     }
 
     public static class OrderItems {
@@ -28,12 +29,6 @@ public class Endpoints {
 
         public static final String CUSTOMERS = BASE_URI;
         public static final String CUSTOMER_BY_ID = BASE_URI + "/{id}";
-    }
-
-    public static class Payments {
-        private static final String BASE_URI = "/api/payments";
-
-        public static final String PAY = BASE_URI;
     }
 
     public static class Delivery {

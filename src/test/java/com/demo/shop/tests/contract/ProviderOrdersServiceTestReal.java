@@ -10,7 +10,6 @@ import com.demo.shop.business.models.OrderItemModel;
 import com.demo.shop.business.models.OrderModel;
 import com.demo.shop.business.models.PaymentModel;
 import com.demo.shop.business.steps.OrderSteps;
-import com.demo.shop.business.steps.PaymentSteps;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,7 +46,6 @@ public class ProviderOrdersServiceTestReal {
 
     public Long setup(){
         OrderSteps orderSteps = new OrderSteps();
-        PaymentSteps paymentSteps = new PaymentSteps();
 
         OrderModel orderModelReq = OrderModel.builder()
                 .customerId(1L)
@@ -55,7 +53,7 @@ public class ProviderOrdersServiceTestReal {
                 .build();
 
         OrderModel orderRes = orderSteps.when_createOrder(orderModelReq);
-        paymentSteps.when_pay(new PaymentModel("card", orderRes.getId()));
+        orderSteps.when_pay(new PaymentModel("card", orderRes.getId()));
 
         return orderRes.getId();
     }

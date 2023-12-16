@@ -13,7 +13,6 @@ import java.util.List;
 public class E2ETests extends BaseTest {
 
     OrderSteps orderSteps = new OrderSteps();
-    PaymentSteps paymentSteps = new PaymentSteps();
     DeliverySteps deliverySteps = new DeliverySteps();
     CustomerSteps customerSteps = new CustomerSteps();
     ProductSteps productSteps = new ProductSteps();
@@ -36,8 +35,8 @@ public class E2ETests extends BaseTest {
         orderSteps.then_validateStatusCode(HttpStatus.CREATED);
         Long orderId = orderRes.getId();
 
-        paymentSteps.when_pay(new PaymentModel("card", orderId));
-        orderSteps.then_validateStatusCode(HttpStatus.CREATED);
+        orderSteps.when_pay(new PaymentModel("card", orderId));
+        orderSteps.then_validateStatusCode(HttpStatus.OK);
         orderRes = orderSteps.when_getOrder(orderId);
         Assertions.assertEquals(OrderStatus.PAYMENT_SUCCEEDED.name(), orderRes.getStatus(), "Wrong order status");
 

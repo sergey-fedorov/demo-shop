@@ -4,6 +4,7 @@ package com.demo.shop.controller;
 import com.demo.shop.dto.OrderFormDto;
 import com.demo.shop.dto.OrderItemDto;
 import com.demo.shop.exception.BadRequestException;
+import com.demo.shop.exception.PaymentServiceException;
 import com.demo.shop.exception.ResourceNotFoundException;
 import com.demo.shop.model.Customer;
 import com.demo.shop.model.Order;
@@ -18,15 +19,12 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -116,9 +114,63 @@ public class OrderController {
         }
     }
 
+    @PostMapping("/pay")
+    public ResponseEntity<Map<String, Long>> pay(@RequestBody PaymentRequest paymentRequest){
+        long transactionId;
+        Order order = orderService.get(paymentRequest.getOrderId());
+
+        if (order.getStatus().equals(OrderStatus.PAYMENT_SUCCEEDED.name()))
+            throw new BadRequestException("Order already paid");
+        if (order.getStatus().equals(OrderStatus.PAYMENT_IN_PROCESS.name()))
+            throw new BadRequestException("Order payment in process");
+
+        order.setStatus(OrderStatus.PAYMENT_IN_PROCESS.name());
+        orderService.update(order);
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<PaymentRequest> request = new HttpEntity<>(paymentRequest, headers);
+
+        try {
+            PaymentResponse response = restTemplate.postForObject("http://localhost:8081/api/payment/proceed", request, PaymentResponse.class);
+            if (response != null)
+                transactionId = response.getTransactionId();
+            else
+                throw new PaymentServiceException("Empty response from payment service");
+        } catch (Exception e){
+            order.setStatus(OrderStatus.PAYMENT_FAILED.name());
+            orderService.update(order);
+            throw new PaymentServiceException(e.getMessage());
+        }
+
+        order.setTransactionId(transactionId);
+        order.setStatus(OrderStatus.PAYMENT_SUCCEEDED.name());
+        orderService.update(order);
+
+        Map<String, Long> responseBody = new HashMap<>();
+        responseBody.put("transactionId", transactionId);
+
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
+    }
+
+
+    @Data
+    public static class PaymentRequest {
+        @NotNull
+        private String type;
+        @NotNull
+        private long orderId;
+    }
+
     @Data
     public static class OrderRequest {
         @NotNull
         private Long orderId;
+    }
+
+    @Data
+    public static class PaymentResponse {
+        private Long transactionId;
     }
 }
