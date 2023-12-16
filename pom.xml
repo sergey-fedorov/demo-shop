@@ -160,6 +160,7 @@
 				<configuration>
 					<systemPropertyVariables>
 						<base.uri>${base.uri}</base.uri>
+						<pact.rootDir>src/test/resources/pacts</pact.rootDir>
 					</systemPropertyVariables>
 				</configuration>
 			</plugin>

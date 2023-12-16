@@ -1,7 +1,7 @@
 package com.demo.shop.controller;
 
 
-import com.demo.shop.dto.OrderFormDto;
+import com.demo.shop.dto.OrderRequestDto;
 import com.demo.shop.dto.OrderItemDto;
 import com.demo.shop.exception.BadRequestException;
 import com.demo.shop.exception.PaymentServiceException;
@@ -59,7 +59,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<Order> create(@RequestBody OrderFormDto form) {
+    public ResponseEntity<Order> create(@Valid @RequestBody OrderRequestDto form) {
         List<OrderItemDto> formDtos = form.getOrderItems();
         validateProductsExistence(formDtos);
 
@@ -123,6 +123,8 @@ public class OrderController {
             throw new BadRequestException("Order already paid");
         if (order.getStatus().equals(OrderStatus.PAYMENT_IN_PROCESS.name()))
             throw new BadRequestException("Order payment in process");
+        if (order.getStatus().equals(OrderStatus.DELIVERED.name()))
+            throw new BadRequestException("Order already delivered");
 
         order.setStatus(OrderStatus.PAYMENT_IN_PROCESS.name());
         orderService.update(order);

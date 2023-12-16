@@ -7,6 +7,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.StreamSupport;
+
 
 @Service
 @Transactional
@@ -24,5 +27,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer create(Customer customer) {
         return customerRepository.save(customer);
+    }
+
+    @Override
+    public List<Customer> getAll() {
+        Iterable<Customer> allCustomers = customerRepository.findAll();
+        return StreamSupport.stream(allCustomers.spliterator(), false).toList();
     }
 }

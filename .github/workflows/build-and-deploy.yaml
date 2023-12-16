@@ -20,6 +20,12 @@ jobs:
         run: mvn '-Dtest=com.demo.shop.tests.unit.*Test' test
       - name: Execute integration tests
         run: mvn '-Dtest=com.demo.shop.tests.integration.*Tests' test
+      - name: Execute contract tests
+        run: | 
+          mvn '-Dtest=com.demo.shop.tests.contract.ConsumerDemoShopTest' test
+          mvn '-Dtest=com.demo.shop.tests.contract.ProviderEmailValidatorServiceTest' test
+          mvn '-Dtest=com.demo.shop.tests.contract.ConsumerDeliveryServiceTest' test
+          mvn '-Dtest=com.demo.shop.tests.contract.ProviderOrdersServiceTestMockTestModel' test
 
   build:
     needs: test

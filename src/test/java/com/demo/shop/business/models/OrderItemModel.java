@@ -11,4 +11,8 @@ public class OrderItemModel {
     private Long productId;
     private Double totalPrice;
 
+    public OrderItemModel(Integer quantity, Long productId) {
+        this.quantity = quantity;
+        this.productId = productId;
+    }
 }

@@ -42,6 +42,7 @@ public class ConsumerDemoShopTest {
     @Test
     @PactTestFor(pactMethod = "getEmailValidationResultSuccess", pactVersion = PactSpecVersion.V3)
     void testGetEmailValidationResultSuccess(MockServer mockServer) {
+        System.setProperty("pact.writer.overwrite", "true");
         RestAssured.baseURI = mockServer.getUrl();
         RestAssured.urlEncodingEnabled = false;
         given().pathParam("email", validEmail)

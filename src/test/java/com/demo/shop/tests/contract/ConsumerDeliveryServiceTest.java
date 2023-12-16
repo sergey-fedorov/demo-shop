@@ -19,6 +19,8 @@ import org.springframework.http.HttpStatus;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.demo.shop.core.Validator.then_validateStatusCode;
+
 @PactConsumerTest
 @PactDirectory("src/test/resources/pacts")
 public class ConsumerDeliveryServiceTest {
@@ -55,7 +57,7 @@ public class ConsumerDeliveryServiceTest {
         RequestSpecificationFactory.mock(mockServer.getUrl(), mockServer.getPort());
 
         orderSteps.when_getOrderListByStatus("PAYMENT_SUCCEEDED");
-        orderSteps.then_validateStatusCode(HttpStatus.OK);
+        then_validateStatusCode(HttpStatus.OK);
         RequestSpecificationFactory.unMock();
     }
 
@@ -87,7 +89,7 @@ public class ConsumerDeliveryServiceTest {
         RequestSpecificationFactory.mock(mockServer.getUrl(), mockServer.getPort());
 
         orderSteps.when_updateStatus(111L);
-        orderSteps.then_validateStatusCode(HttpStatus.OK);
+        then_validateStatusCode(HttpStatus.OK);
         RequestSpecificationFactory.unMock();
     }
 

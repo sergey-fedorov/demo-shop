@@ -1,19 +1,33 @@
 package com.demo.shop.business.steps;
 
 import com.demo.shop.business.Endpoints;
+import com.demo.shop.business.models.OrderItemModel;
 import com.demo.shop.business.models.OrderModel;
 import com.demo.shop.business.models.PaymentModel;
+import com.demo.shop.business.models.ProductModel;
 import com.demo.shop.core.BaseApi;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static com.demo.shop.core.Utils.*;
+
 public class OrderSteps extends BaseApi {
+
+    CustomerSteps customerSteps = new CustomerSteps();
+    ProductSteps productSteps = new ProductSteps();
 
     public OrderModel when_createOrder(OrderModel order){
         httpRequest.post(Endpoints.Orders.ORDERS, order);
+        return getResponseAs(OrderModel.class);
+    }
+
+    public OrderModel when_createOrder(Long customerId, List<OrderItemModel> orderItems){
+        OrderModel orderModelReq = OrderModel.builder().customerId(customerId).orderItems(orderItems).build();
+        httpRequest.post(Endpoints.Orders.ORDERS, orderModelReq);
         return getResponseAs(OrderModel.class);
     }
 
@@ -40,6 +54,28 @@ public class OrderSteps extends BaseApi {
     public Transaction when_pay(PaymentModel paymentModel){
         httpRequest.post(Endpoints.Orders.PAY, paymentModel);
         return getResponseAs(Transaction.class);
+    }
+
+    public OrderModel when_getAnyNewOrder(){
+        List<OrderModel> orderList = when_getOrderListByStatus("NEW");
+        if (orderList.isEmpty()){
+            Long customerId = customerSteps.when_getAnyCustomer().getId();
+            return when_createOrder(customerId, generateOrderItemsList(3));
+        } else
+            return orderList.get(getRandomElement(orderList));
+    }
+
+    private List<OrderItemModel> generateOrderItemsList(int amt){
+        List<OrderItemModel> orderItems = new ArrayList<>();
+        int numberOfItems = getRandomPositiveInt(amt);
+        List<ProductModel> products = productSteps.when_getAnyProducts(numberOfItems);
+
+        for (int i = 0; i < numberOfItems; i++) {
+            int quantity = getRandomPositiveInt(10);
+            Long productId = products.get(i).getId();
+            orderItems.add(new OrderItemModel(quantity, productId));
+        }
+        return orderItems;
     }
 
     @Data

@@ -10,6 +10,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.http.HttpStatus;
 
+import static com.demo.shop.core.Validator.then_validateErrorResponse;
+import static com.demo.shop.core.Validator.then_validateStatusCode;
+
 public class CustomerTests extends BaseTest {
 
     Faker faker = new Faker();
@@ -20,7 +23,7 @@ public class CustomerTests extends BaseTest {
         CustomerModel customerReqBody = CustomerModel.getFake();
 
         CustomerModel customerResBody = customerSteps.when_createCustomer(customerReqBody);
-        customerSteps.then_validateStatusCode(HttpStatus.CREATED);
+        then_validateStatusCode(HttpStatus.CREATED);
         Assertions.assertEquals(customerReqBody, customerResBody);
 
         customerResBody = customerSteps.when_getCustomerDetails(customerResBody.getId());
@@ -32,17 +35,17 @@ public class CustomerTests extends BaseTest {
         CustomerModel customerReqBody = CustomerModel.getFake()
                 .setFullName("");
         customerSteps.when_createCustomer(customerReqBody);
-        customerSteps.then_validateErrorResponse(HttpStatus.BAD_REQUEST, "Full name is required");
+       then_validateErrorResponse(HttpStatus.BAD_REQUEST, "Full name is required");
 
         customerReqBody = CustomerModel.getFake()
                 .setAddress("");
         customerSteps.when_createCustomer(customerReqBody);
-        customerSteps.then_validateErrorResponse(HttpStatus.BAD_REQUEST, "Address is required");
+        then_validateErrorResponse(HttpStatus.BAD_REQUEST, "Address is required");
 
         customerReqBody = CustomerModel.getFake()
                 .setEmail("");
         customerSteps.when_createCustomer(customerReqBody);
-        customerSteps.then_validateErrorResponse(HttpStatus.BAD_REQUEST, "Email is required");
+        then_validateErrorResponse(HttpStatus.BAD_REQUEST, "Email is required");
     }
 
     @Test
@@ -50,7 +53,7 @@ public class CustomerTests extends BaseTest {
         CustomerModel customerReqBody = CustomerModel.getFake();
         customerSteps.when_createCustomer(customerReqBody);
         customerSteps.when_createCustomer(customerReqBody);
-        customerSteps.then_validateErrorResponse(HttpStatus.BAD_REQUEST, "Entry already exists");
+        then_validateErrorResponse(HttpStatus.BAD_REQUEST, "Entry already exists");
     }
 
     @ParameterizedTest
@@ -66,7 +69,7 @@ public class CustomerTests extends BaseTest {
                 .email(email)
                 .build();
         customerSteps.when_createCustomer(customerReqBody);
-        customerSteps.then_validateErrorResponse(HttpStatus.BAD_REQUEST, message);
+        then_validateErrorResponse(HttpStatus.BAD_REQUEST, message);
     }
 
 
