@@ -1,4 +1,4 @@
-package com.demo.shop.payment.service;
+package com.demo.shop.thirdparty.service.payment;
 
 import com.demo.shop.exception.BadRequestException;
 import jakarta.validation.constraints.NotNull;

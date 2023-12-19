@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.Data;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +68,16 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorItem> handle(MethodArgumentNotValidException e) {
-        String validationMessages = e.getBindingResult().getFieldErrors().stream().map(ve -> ve.getField() + " " + ve.getDefaultMessage()).collect(Collectors.joining(", "));
+//        String validationMessages = e.getBindingResult().getFieldErrors().stream().map(ve -> ve.getField() + " " + ve.getDefaultMessage()).collect(Collectors.joining(", "));
+        String validationMessages = e.getBindingResult().getFieldErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining(", "));
+        ErrorItem error = new ErrorItem();
+        error.setErrorMessage(validationMessages);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorItem> handle(MethodArgumentTypeMismatchException e) {
+        String validationMessages = "Invalid type of parameter " + e.getName();
         ErrorItem error = new ErrorItem();
         error.setErrorMessage(validationMessages);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);

@@ -1,4 +1,4 @@
-package com.demo.shop.delivery.service;
+package com.demo.shop.thirdparty.service.delivery;
 
 import lombok.Data;
 import org.springframework.core.ParameterizedTypeReference;

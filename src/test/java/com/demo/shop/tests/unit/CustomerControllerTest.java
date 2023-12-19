@@ -50,6 +50,8 @@ public class CustomerControllerTest {
             .fullName("Test Name")
             .build();
 
+    /* getCustomer */
+
     @Test
     public void shouldReturnCustomerDetails() throws Exception {
         when(customerService.get(anyLong())).thenReturn(customer);
@@ -60,23 +62,41 @@ public class CustomerControllerTest {
         mockMvc.perform(requestBuilder)
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.email").value("testname@email.com"))
-                .andExpect(jsonPath("$.address").value("City"))
-                .andExpect(jsonPath("$.fullName").value("Test Name"));
+                .andExpect(jsonPath("$.id").value(customer.getId()))
+                .andExpect(jsonPath("$.email").value(customer.getEmail()))
+                .andExpect(jsonPath("$.address").value(customer.getAddress()))
+                .andExpect(jsonPath("$.fullName").value(customer.getFullName()));
+    }
 
-        requestBuilder = MockMvcRequestBuilders
+    @Test
+    public void shouldTrowBadRequest_WrongPathParameterType() throws Exception {
+        when(customerService.get(anyLong())).thenReturn(customer);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/api/customers/abc");
 
         mockMvc.perform(requestBuilder)
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorMessage").value("Invalid type of parameter customerId"));
+    }
+
+    @Test
+    public void shouldTrowBadRequest_PathParameterLessOrZero() throws Exception {
+        when(customerService.get(anyLong())).thenReturn(customer);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/api/customers/0");
+
+        mockMvc.perform(requestBuilder)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorMessage").value("must be greater than or equal to 1"));
     }
 
 
     @Test
-    public void shouldReturnBadRequest() throws Exception {
-
+    public void shouldTrowResourceNotFound_MissingCustomer() throws Exception {
         when(customerService.get(anyLong())).thenThrow(ResourceNotFoundException.class);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
@@ -86,6 +106,8 @@ public class CustomerControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isNotFound());
     }
+
+    /* createCustomer */
 
     @Test
     public void shouldCreateNewCustomer() throws Exception {
@@ -107,10 +129,70 @@ public class CustomerControllerTest {
         mockMvc.perform(requestBuilder)
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.email").value("testname@email.com"))
-                .andExpect(jsonPath("$.address").value("City"))
-                .andExpect(jsonPath("$.fullName").value("Test Name"));
+                .andExpect(jsonPath("$.id").value(customer.getId()))
+                .andExpect(jsonPath("$.email").value(customer.getEmail()))
+                .andExpect(jsonPath("$.address").value(customer.getAddress()))
+                .andExpect(jsonPath("$.fullName").value(customer.getFullName()));
+    }
+
+    @Test
+    public void shouldTrowBadRequest_EmailHasWrongFormat() throws Exception {
+        EmailValidatorDto emailValidatorDto = EmailValidatorDto.builder()
+                .format(false)
+                .build();
+
+        when(emailValidatorService.request(customer.getEmail())).thenReturn(emailValidatorDto);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/customers")
+                .content(new ObjectMapper().writeValueAsString(customer))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(jsonPath("$.errorMessage").value("Email format is not valid"));
+    }
+
+    @Test
+    public void shouldTrowBadRequest_EmailIsDisposable() throws Exception {
+        EmailValidatorDto emailValidatorDto = EmailValidatorDto.builder()
+                .format(true)
+                .domain("example.com")
+                .disposable(true)
+                .dns(true)
+                .build();
+
+        when(emailValidatorService.request(customer.getEmail())).thenReturn(emailValidatorDto);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/customers")
+                .content(new ObjectMapper().writeValueAsString(customer))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(jsonPath("$.errorMessage").value("Email address is disposable"));
+    }
+
+    @Test
+    public void shouldTrowBadRequest_EmailIsInvalid() throws Exception {
+        EmailValidatorDto emailValidatorDto = EmailValidatorDto.builder()
+                .format(true)
+                .domain("example.com")
+                .disposable(false)
+                .dns(false)
+                .build();
+
+        when(emailValidatorService.request(customer.getEmail())).thenReturn(emailValidatorDto);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/customers")
+                .content(new ObjectMapper().writeValueAsString(customer))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(jsonPath("$.errorMessage").value("Email address is not valid"));
     }
 
 }

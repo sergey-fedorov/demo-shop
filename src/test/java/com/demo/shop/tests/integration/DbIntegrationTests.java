@@ -4,6 +4,7 @@ import com.demo.shop.model.Customer;
 import com.demo.shop.model.Order;
 import com.demo.shop.model.OrderItem;
 import com.demo.shop.model.Product;
+import com.demo.shop.repository.CustomerRepository;
 import com.demo.shop.service.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,9 @@ public class DbIntegrationTests {
     ProductService productService;
     @Autowired
     OrderItemService orderItemService;
+
+    @Autowired
+    CustomerRepository customerRepository;
 
     @Container
     static MySQLContainer mySQLContainer = new MySQLContainer<>("mysql:8.1.0");
@@ -58,10 +62,11 @@ public class DbIntegrationTests {
 
     @Test
     public void shouldSaveAndFetchCustomer() {
-        Long customerId = customerService.create(customer).getId();
+//        Long customerId = customerService.create(customer).getId();
+        Long customerId = customerRepository.save(customer).getId();
         Assertions.assertEquals(
                 customer,
-                customerService.get(customerId)
+                customerRepository.findById(customerId).orElseThrow()
         );
     }
 

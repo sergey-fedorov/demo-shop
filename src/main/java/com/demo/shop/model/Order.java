@@ -3,10 +3,7 @@ package com.demo.shop.model;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,6 +29,7 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     @JsonIgnore
+    @ToString.Exclude
     private Customer customer;
 
     @OneToMany(mappedBy = "pk.order")

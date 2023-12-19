@@ -24,7 +24,7 @@ public class ConsumerDemoShopTest {
     @Pact(provider = "emailValidator_provider", consumer = "demoShop_consumer")
     public RequestResponsePact getEmailValidationResultSuccess(PactDslWithProvider builder) {
         return builder
-                .uponReceiving("Validation result from email validator service")
+                .uponReceiving("a request to validate a provided email by the validator service")
                 .path("/api/email/" + validEmail)
                 .method("GET")
                 .willRespondWith()
