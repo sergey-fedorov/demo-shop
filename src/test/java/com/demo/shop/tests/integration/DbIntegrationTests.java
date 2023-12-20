@@ -16,6 +16,7 @@ import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
@@ -63,7 +64,7 @@ public class DbIntegrationTests {
 
     @Test
     public void shouldSaveAndFetchOrder() {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Customer customer = Customer.builder().email("testname2@email.com").address("City").fullName("Test Name").build();
         Customer customerRecord = customerRepository.save(customer);
         Order order = Order.builder().dateCreated(now).customer(customerRecord).status("NEW").build();
