@@ -1,6 +1,6 @@
 # demo-shop
 
-That project has been created to practice the test development on different levels from unit to end-to-end, building a CI/CD pipeline from scratch, and integrating tests to it for a microservices-based application.
+That project has been created to showcase the test development on different levels from unit to end-to-end, building a CI/CD pipeline from scratch, and integrating tests to it for a microservices-based application.
 
 ## Application under test
 
