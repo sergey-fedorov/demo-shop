@@ -1,11 +1,10 @@
 package com.demo.shop.tests.integration;
 
-import com.demo.shop.model.Customer;
-import com.demo.shop.model.Order;
-import com.demo.shop.model.OrderItem;
-import com.demo.shop.model.Product;
+import com.demo.shop.model.*;
 import com.demo.shop.repository.CustomerRepository;
-import com.demo.shop.service.*;
+import com.demo.shop.repository.OrderItemRepository;
+import com.demo.shop.repository.OrderRepository;
+import com.demo.shop.repository.ProductRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,23 +16,19 @@ import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
 public class DbIntegrationTests {
 
     @Autowired
-    CustomerService customerService;
-    @Autowired
-    OrderService orderService;
-    @Autowired
-    ProductService productService;
-    @Autowired
-    OrderItemService orderItemService;
-
-    @Autowired
     CustomerRepository customerRepository;
+    @Autowired
+    OrderRepository orderRepository;
+    @Autowired
+    ProductRepository productRepository;
+    @Autowired
+    OrderItemRepository orderItemRepository;
 
     @Container
     static MySQLContainer mySQLContainer = new MySQLContainer<>("mysql:8.1.0");
@@ -43,26 +38,12 @@ public class DbIntegrationTests {
         registry.add("spring.datasource.url", mySQLContainer::getJdbcUrl);
         registry.add("spring.datasource.username", mySQLContainer::getUsername);
         registry.add("spring.datasource.password", mySQLContainer::getPassword);
-
     }
 
-    Customer customer = Customer.builder()
-            .email("testname@email.com")
-            .address("City")
-            .fullName("Test Name")
-            .build();
-    Product product = Product.builder()
-            .name("Test product")
-            .price(5.0)
-            .pictureUrl("product.png")
-            .build();
-    Order order = Order.builder()
-            .status("TEST")
-            .build();
 
     @Test
     public void shouldSaveAndFetchCustomer() {
-//        Long customerId = customerService.create(customer).getId();
+        Customer customer = Customer.builder().email("testname@email.com").address("City").fullName("Test Name").build();
         Long customerId = customerRepository.save(customer).getId();
         Assertions.assertEquals(
                 customer,
@@ -72,90 +53,84 @@ public class DbIntegrationTests {
 
     @Test
     public void shouldSaveAndFetchProduct() {
-        Long productId = productService.create(product).getId();
+        Product product = Product.builder().name("Test product").price(5.0).pictureUrl("product.png").build();
+        Long productId = productRepository.save(product).getId();
         Assertions.assertEquals(
                 product,
-                productService.getProduct(productId)
+                productRepository.findById(productId).orElseThrow()
         );
     }
 
     @Test
     public void shouldSaveAndFetchOrder() {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
-        Long customerId = customerService.create(customer.setEmail("testname2@email.com")).getId();
-        order.setCustomer(Customer.builder().id(customerId).build());
-
-        Long orderId = orderService.create(order).getId();
         LocalDateTime now = LocalDateTime.now();
+        Customer customer = Customer.builder().email("testname2@email.com").address("City").fullName("Test Name").build();
+        Customer customerRecord = customerRepository.save(customer);
+        Order order = Order.builder().dateCreated(now).customer(customerRecord).status("NEW").build();
 
-        Order orderRecord = orderService.get(orderId);
+        Long orderId = orderRepository.save(order).getId();
+        Order orderRecord = orderRepository.findById(orderId).orElseThrow();
 
-        Assertions.assertEquals(orderId, orderRecord.getId());
-        Assertions.assertEquals("TEST", orderRecord.getStatus());
-        Assertions.assertEquals(dtf.format(now), orderRecord.getDateCreated().format(dtf));
+        Assertions.assertEquals(order.getStatus(), orderRecord.getStatus());
+        Assertions.assertEquals(now, orderRecord.getDateCreated());
         Assertions.assertNull(orderRecord.getTransactionId());
-        Assertions.assertEquals(customerId, orderRecord.getCustomerId());
+        Assertions.assertEquals(customerRecord.getId(), orderRecord.getCustomerId());
     }
 
     @Test
     public void shouldSaveAndFetchOrderItem() {
-        Long customerId = customerService.create(customer.setEmail("testname3@email.com")).getId();
-        int quantity = 2;
-        Long productId = productService.create(product).getId();
-        order.setCustomer(Customer.builder().id(customerId).build());
-        Long orderId = orderService.create(order).getId();
-        OrderItem orderItem = new OrderItem(
-                Order.builder().id(orderId).build(),
-                Product.builder().id(productId).build(),
-                quantity);
+        Customer customer = Customer.builder().email("testname3@email.com").address("City").fullName("Test Name").build();
+        Customer customerRecord = customerRepository.save(customer);
+        Product product = Product.builder().name("Test product").price(5.0).pictureUrl("product.png").build();
+        Product productRecord = productRepository.save(product);
+        Order order = Order.builder().dateCreated(LocalDateTime.now()).customer(customerRecord).status("NEW").build();
+        Order orderRecord = orderRepository.save(order);
 
-        OrderItem orderItemRecord = orderItemService.create(orderItem);
+        OrderItem orderItem = new OrderItem(orderRecord, productRecord, 2);
+        orderItemRepository.save(orderItem);
+        OrderItem orderItemRecord = orderItemRepository.findById(new OrderItemPK(orderRecord, productRecord)).orElseThrow();
 
-        Assertions.assertEquals(quantity, orderItemRecord.getQuantity());
-        Assertions.assertEquals(productId, orderItemRecord.getProductId());
-        Assertions.assertEquals(productId, orderItemRecord.getProductId());
+        Assertions.assertEquals(orderItem.getQuantity(), orderItemRecord.getQuantity());
+        Assertions.assertEquals(orderItem.getOrder().getId(), orderItemRecord.getOrder().getId());
+        Assertions.assertEquals(orderItem.getProduct().getId(), orderItemRecord.getProduct().getId());
     }
 
     @Test
-    public void shouldNotSaveOrder_CustomerIdFKConstraint() {
+    public void shouldNotSaveOrder_MissingCustomer_CustomerIdFKConstraint() {
         Long customerId = 999L;
-        order.setCustomer(Customer.builder().id(customerId).build());
+        Customer customer = Customer.builder().id(customerId).build();
+        Order order = Order.builder().dateCreated(LocalDateTime.now()).customer(customer).status("NEW").build();
 
         Exception exception = Assertions.assertThrows(
-                DataIntegrityViolationException.class, () -> orderService.create(order));
+                DataIntegrityViolationException.class, () -> orderRepository.save(order));
         Assertions.assertTrue(exception.getMessage().contains("FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`)"));
     }
 
     @Test
-    public void shouldNotSaveOrderItem_ProductIdFKConstraint() {
-        Long customerId = customerService.create(customer.setEmail("testname4@email.com")).getId();
-        int quantity = 2;
+    public void shouldNotSaveOrderItem_MissingProduct_ProductIdFKConstraint() {
         Long productId = 999L;
-        order.setCustomer(Customer.builder().id(customerId).build());
-        Long orderId = orderService.create(order).getId();
-        OrderItem orderItem = new OrderItem(
-                Order.builder().id(orderId).build(),
-                Product.builder().id(productId).build(),
-                quantity);
+        Customer customer = Customer.builder().email("testname4@email.com").address("City").fullName("Test Name").build();
+        Customer customerRecord = customerRepository.save(customer);
+        Product product = Product.builder().id(productId).build();
+        Order order = Order.builder().dateCreated(LocalDateTime.now()).customer(customerRecord).status("NEW").build();
+        Order orderRecord = orderRepository.save(order);
+
+        OrderItem orderItem = new OrderItem(orderRecord, product, 2);
 
         Exception exception = Assertions.assertThrows(
-                DataIntegrityViolationException.class, () -> orderItemService.create(orderItem));
+                DataIntegrityViolationException.class, () -> orderItemRepository.save(orderItem));
         Assertions.assertTrue(exception.getMessage().contains("FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)"));
     }
 
 
     @Test
-    public void shouldNotSaveCustomer_DuplicateEntry() {
-        customerService.create(customer.setEmail("testname5@email.com"));
-
-        Customer customerDuplicate = Customer.builder()
-                .email("testname5@email.com")
-                .address("City")
-                .fullName("Test Name")
-                .build();
+    public void shouldNotSaveCustomer_ExistingCustomer_DuplicateEntry() {
+        Customer customerOne = Customer.builder().email("testname5@email.com").address("City").fullName("Test Name").build();
+        Customer customerTwo = Customer.builder().email("testname5@email.com").address("City").fullName("Test Name").build();
+        customerRepository.save(customerOne);
 
         Exception exception = Assertions.assertThrows(
-                DataIntegrityViolationException.class, () -> customerService.create(customerDuplicate));
+                DataIntegrityViolationException.class, () -> customerRepository.save(customerTwo));
         Assertions.assertTrue(exception.getMessage().contains("Duplicate entry"));
     }
 

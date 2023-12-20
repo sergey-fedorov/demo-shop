@@ -1,4 +1,4 @@
-package com.demo.shop.tests.contract;
+package com.demo.shop.tests.contract.provider;
 
 import au.com.dius.pact.provider.junit5.HttpTestTarget;
 import au.com.dius.pact.provider.junit5.PactVerificationContext;

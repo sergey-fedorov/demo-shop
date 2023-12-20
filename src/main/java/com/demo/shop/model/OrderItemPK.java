@@ -6,13 +6,14 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-@Embeddable
+@Embeddable @Data @AllArgsConstructor @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "order")
-@Data
 public class OrderItemPK implements Serializable {
 
     private static final long serialVersionUID = 476151177562655457L;

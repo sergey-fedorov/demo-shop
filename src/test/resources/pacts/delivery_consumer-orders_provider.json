@@ -1,0 +1,347 @@
+{
+  "consumer": {
+    "name": "delivery_consumer"
+  },
+  "interactions": [
+    {
+      "description": "a request to get the empty list of orders from api-orders",
+      "providerStates": [
+        {
+          "name": "no orders with status PAYMENT_SUCCEEDED exist"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/api/orders",
+        "query": {
+          "status": [
+            "PAYMENT_SUCCEEDED"
+          ]
+        }
+      },
+      "response": {
+        "body": [
+
+        ],
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to update order status",
+      "providerStates": [
+        {
+          "name": "order with id 999 does not exist"
+        }
+      ],
+      "request": {
+        "body": {
+          "orderId": 999
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/orders/status"
+      },
+      "response": {
+        "body": {
+          "errorMessage": "string"
+        },
+        "generators": {
+          "body": {
+            "$.errorMessage": {
+              "size": 20,
+              "type": "RandomString"
+            }
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json; charset=UTF-8"
+        },
+        "matchingRules": {
+          "body": {
+            "$.errorMessage": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "application/json(;\\s?charset=[\\w\\-]+)?"
+                }
+              ]
+            }
+          }
+        },
+        "status": 404
+      }
+    },
+    {
+      "description": "a request to update order status",
+      "providerStates": [
+        {
+          "name": "order with status PAYMENT_SUCCEEDED exists"
+        }
+      ],
+      "request": {
+        "body": {
+          "orderId": 1
+        },
+        "generators": {
+          "body": {
+            "$.orderId": {
+              "dataType": "INTEGER",
+              "expression": "orderId",
+              "type": "ProviderState"
+            }
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.orderId": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "method": "POST",
+        "path": "/api/orders/status"
+      },
+      "response": {
+        "body": {
+          "id": 1234567890,
+          "status": "string"
+        },
+        "generators": {
+          "body": {
+            "$.id": {
+              "max": 2147483647,
+              "min": 0,
+              "type": "RandomInt"
+            },
+            "$.status": {
+              "size": 20,
+              "type": "RandomString"
+            }
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json; charset=UTF-8"
+        },
+        "matchingRules": {
+          "body": {
+            "$.id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.status": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "application/json(;\\s?charset=[\\w\\-]+)?"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to get the list of PAYMENT_SUCCEEDED orders from api-orders",
+      "providerStates": [
+        {
+          "name": "orders with PAYMENT_SUCCEEDED and other statuses exist"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/api/orders",
+        "query": {
+          "status": [
+            "PAYMENT_SUCCEEDED"
+          ]
+        }
+      },
+      "response": {
+        "body": [
+          {
+            "customerId": 1234567890,
+            "id": 1234567890,
+            "numberOfProducts": 100,
+            "orderItems": [
+              {
+                "productId": 1234567890,
+                "quantity": 100,
+                "totalPrice": 1.0
+              }
+            ],
+            "status": "PAYMENT_SUCCEEDED"
+          }
+        ],
+        "generators": {
+          "body": {
+            "$[*].customerId": {
+              "max": 2147483647,
+              "min": 0,
+              "type": "RandomInt"
+            },
+            "$[*].id": {
+              "max": 2147483647,
+              "min": 0,
+              "type": "RandomInt"
+            },
+            "$[*].numberOfProducts": {
+              "max": 2147483647,
+              "min": 0,
+              "type": "RandomInt"
+            },
+            "$[*].orderItems[*].productId": {
+              "max": 2147483647,
+              "min": 0,
+              "type": "RandomInt"
+            },
+            "$[*].orderItems[*].quantity": {
+              "max": 2147483647,
+              "min": 0,
+              "type": "RandomInt"
+            }
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json; charset=UTF-8"
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 1
+                }
+              ]
+            },
+            "$[*].customerId": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$[*].id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$[*].numberOfProducts": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$[*].orderItems": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$[*].orderItems[*].productId": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$[*].orderItems[*].quantity": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$[*].orderItems[*].totalPrice": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "number"
+                }
+              ]
+            },
+            "$[*].status": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "equality"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "application/json(;\\s?charset=[\\w\\-]+)?"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pact-jvm": {
+      "version": "4.6.3"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "orders_provider"
+  }
+}

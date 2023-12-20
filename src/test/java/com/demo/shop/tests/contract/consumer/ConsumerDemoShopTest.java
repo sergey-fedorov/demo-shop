@@ -1,4 +1,4 @@
-package com.demo.shop.tests.contract;
+package com.demo.shop.tests.contract.consumer;
 
 import au.com.dius.pact.consumer.MockServer;
 import au.com.dius.pact.consumer.dsl.PactDslJsonBody;

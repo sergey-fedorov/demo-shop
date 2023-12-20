@@ -30,6 +30,11 @@ public class OrderItem {
         return this.pk.getProduct();
     }
 
+    @JsonIgnore
+    public Order getOrder() {
+        return this.pk.getOrder();
+    }
+
     @Transient
     public long getProductId() {
         return getProduct().getId();
