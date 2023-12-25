@@ -9,21 +9,16 @@ jobs:
   code_coverage:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v3
+      - name: Setup
+        uses: ./.github/actions/checkout-and-java-setup
       - name: Unit test code coverage
         run: mvn jacoco:check@jacoco-check
 
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v3
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+      - name: Setup
+        uses: ./.github/actions/checkout-and-java-setup
       - name: Execute unit tests
         run: mvn '-Dtest=com.demo.shop.tests.unit.*Test' test
       - name: Execute integration tests
@@ -37,13 +32,9 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v3
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+      - name: Setup
+        uses: ./.github/actions/checkout-and-java-setup
+
       - name: Build project
         run: mvn clean install -DskipTests
 
@@ -83,13 +74,8 @@ jobs:
     needs: deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v3
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+      - name: Setup
+        uses: ./.github/actions/checkout-and-java-setup
       - name: Execute E2E tests
         run: mvn '-Dtest=com.demo.shop.tests.e2e.*Tests' test -P remote
         
