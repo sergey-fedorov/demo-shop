@@ -11,8 +11,11 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
-      - name: Java setup
-        uses: ./.github/actions/java-setup
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
       - name: Unit test code coverage
         run: mvn jacoco:check@jacoco-check
 
@@ -21,8 +24,11 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
-      - name: Java setup
-        uses: ./.github/actions/java-setup
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
       - name: Execute unit tests
         run: mvn '-Dtest=com.demo.shop.tests.unit.*Test' test
       - name: Execute integration tests
@@ -38,9 +44,11 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
-      - name: Java setup
-        uses: ./.github/actions/java-setup
-
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
       - name: Build project
         run: mvn clean install -DskipTests
 
@@ -82,7 +90,10 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
-      - name: Java setup
-        uses: ./.github/actions/java-setup
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
       - name: Execute E2E tests
         run: mvn '-Dtest=com.demo.shop.tests.e2e.*Tests' test -P remote
