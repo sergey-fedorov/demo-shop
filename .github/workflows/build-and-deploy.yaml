@@ -6,6 +6,14 @@ on:
 
 jobs:
 
+  code_coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+      - name: Unit test code coverage
+        run: mvn jacoco:check@jacoco-check
+
   test:
     runs-on: ubuntu-latest
     steps:
