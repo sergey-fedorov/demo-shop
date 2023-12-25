@@ -9,7 +9,7 @@ It is a backend app with the simple functionality of an abstract e-commerce solu
 It communicates with three backend services: a third-party email validator and two very basic services for order payment and delivery that are located in the current codebase to reduce deployment and support expenses.
 
 <p align="center">
-  <img src="https://github.com/sergey-fedorov/demo-shop/assets/11277217/9b49db51-7534-497b-99d5-cc38d52c9ba3"/>
+  <img src="https://github.com/sergey-fedorov/demo-shop/assets/11277217/52fdfc82-14aa-4fdb-ac5d-b0a72c6002fd"/>
 </p>
 
 ### Build and deploy
@@ -78,7 +78,19 @@ Tools: RestAssured
 
 ## Tests integration into CI/CD pipeline
 
-
 <p align="center">
   <img src="https://github.com/sergey-fedorov/demo-shop/assets/11277217/c6d458e6-59ca-4cee-acc2-3c9987b1d0b5"/>
 </p>
+
+## Todo
+
+- [ ] README: Add brief description for test level sections
+- [ ] APP: Add JaCoCo code coverage library, add it to ci/cd
+- [ ] APP: Add Swagger
+- [ ] TEST: Add componen tests
+- [ ] TEST: Add Pact Broker for contracts sharing
+- [ ] TEST: Add more E2E tests
+- [ ] README: Create state transition diagram for order statuses and tests based on it
+- [ ] README: Describe test automation framework used for E2E tests
+- [ ] TEST: Add logging library
+- [ ] TEST: Add reporting for E2E tests
