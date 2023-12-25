@@ -14,7 +14,14 @@ It communicates with three backend services: a third-party email validator and t
 
 ### Build and deploy
 Tools: Maven, Docker, GitHub Actions, Docker Hub, AWS EC2
-Application is built with Maven, dockerized and deployed to EC2 instance
+
+Application is built with Maven, dockerized and deployed to EC2 instance.
+
+CI/CD pipeline configuration before the tests integration:
+
+<p align="center">
+  <img src="https://github.com/sergey-fedorov/demo-shop/assets/11277217/d1b6b5a8-1608-43f0-9a18-d0aae00e1dd8"/>
+</p>
 
 ## Test levels
 According to the classic Test Pyramid the main portion of tests are created on unit level and the smallest amount on E2E level.
@@ -59,7 +66,7 @@ Tools: Pact, Testcontainers <br/>
 Side note: Contract testing is an enhanced version of a regular integration testing.
 Consumer side tests are executing against a mocked provider service and generate contract file.
 On provider side tests the data layer should be mocked as well as external services.
-The main challenge is a communication between consumer and provider to share the updated contract file.
+One of the challenges is a communication between consumer and provider to share the updated contract file.
 
 ### Component tests
 Mocking: <br/>
@@ -69,4 +76,9 @@ Tools:
 Mocking: no <br/>
 Tools: RestAssured
 
-## CI/CD
+## Tests integration into CI/CD pipeline
+
+
+<p align="center">
+  <img src="https://github.com/sergey-fedorov/demo-shop/assets/11277217/c6d458e6-59ca-4cee-acc2-3c9987b1d0b5"/>
+</p>
