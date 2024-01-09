@@ -9,6 +9,7 @@ import com.demo.shop.model.OrderStatus;
 import com.demo.shop.service.OrderItemService;
 import com.demo.shop.service.OrderService;
 import com.demo.shop.service.ProductService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/order-items")
+@Tag(name = "api-order-items", description = "Demo-shop")
 public class OrderItemController {
 
     @Autowired

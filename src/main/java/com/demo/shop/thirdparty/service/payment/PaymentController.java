@@ -1,6 +1,7 @@
 package com.demo.shop.thirdparty.service.payment;
 
 import com.demo.shop.exception.BadRequestException;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import java.util.Random;
 
 @RestController
 @RequestMapping("/api/payment")
+@Tag(name = "api-payment", description = "Payment service")
 public class PaymentController {
 
     @PostMapping("/proceed")

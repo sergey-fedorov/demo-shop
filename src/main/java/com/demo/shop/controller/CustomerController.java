@@ -5,6 +5,7 @@ import com.demo.shop.dto.EmailValidatorDto;
 import com.demo.shop.model.Customer;
 import com.demo.shop.service.CustomerService;
 import com.demo.shop.service.EmailValidatorService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -19,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/customers")
 @Validated
+@Tag(name = "api-customers", description = "Demo-shop")
 public class CustomerController {
 
     @Autowired

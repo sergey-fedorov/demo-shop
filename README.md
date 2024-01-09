@@ -5,6 +5,8 @@ That project has been created to showcase the test development on different leve
 AUT has been created using the Spring Boot framework and MySQL database.
 It is a backend app with the simple functionality of an abstract e-commerce solution that allows a customer to place an order with a set of products.
 
+Swagger specs: http://{HOST}:8081/swagger-ui/index.html
+
 ### External integrations
 It communicates with three backend services: a third-party email validator and two very basic services for order payment and delivery that are located in the current codebase to reduce deployment and support expenses.
 
@@ -86,7 +88,6 @@ Tools: RestAssured
 
 - [ ] README: Add brief description for test level sections
 - [ ] APP: Add JaCoCo code coverage library, add it to ci/cd
-- [ ] APP: Add Swagger
 - [ ] TEST: Add componen tests
 - [ ] TEST: Add Pact Broker for contracts sharing
 - [ ] TEST: Add more E2E tests
@@ -94,3 +95,4 @@ Tools: RestAssured
 - [ ] README: Describe test automation framework used for E2E tests
 - [ ] TEST: Add logging library
 - [ ] TEST: Add reporting for E2E tests
+- [x] APP: Add Swagger Specification

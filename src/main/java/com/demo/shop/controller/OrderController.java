@@ -14,6 +14,7 @@ import com.demo.shop.service.CustomerService;
 import com.demo.shop.service.OrderItemService;
 import com.demo.shop.service.OrderService;
 import com.demo.shop.service.ProductService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/orders")
 @NoArgsConstructor
+@Tag(name = "api-orders", description = "Demo-shop")
 public class OrderController {
 
     @Autowired

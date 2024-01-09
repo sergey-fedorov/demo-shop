@@ -1,5 +1,6 @@
 package com.demo.shop.thirdparty.service.delivery;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -9,8 +10,10 @@ import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.Map;
 
+
 @RestController
 @RequestMapping("/api/delivery")
+@Tag(name = "api-delivery", description = "Delivery service")
 public class DeliveryController {
 
     /* Delivery service uses it when the order is shipped by a courier */
