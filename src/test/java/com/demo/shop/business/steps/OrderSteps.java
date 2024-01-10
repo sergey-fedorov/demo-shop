@@ -65,13 +65,13 @@ public class OrderSteps extends BaseApi {
             return orderList.get(getRandomElement(orderList));
     }
 
-    private List<OrderItemModel> generateOrderItemsList(int amt){
+    private List<OrderItemModel> generateOrderItemsList(int size){
         List<OrderItemModel> orderItems = new ArrayList<>();
-        int numberOfItems = getRandomPositiveInt(amt);
+        int numberOfItems = getRandomPositiveIntWithLimit(size);
         List<ProductModel> products = productSteps.when_getAnyProducts(numberOfItems);
 
         for (int i = 0; i < numberOfItems; i++) {
-            int quantity = getRandomPositiveInt(10);
+            int quantity = getRandomPositiveIntWithLimit(10);
             Long productId = products.get(i).getId();
             orderItems.add(new OrderItemModel(quantity, productId));
         }

@@ -29,11 +29,10 @@ public class ProductSteps extends BaseApi {
     }
 
     public List<ProductModel> when_getAnyProducts(int numberOfProducts){
-        List<ProductModel> products = when_getAllProducts();
-
-        while (products.size() < numberOfProducts)
+        while (when_getAllProducts().size() < numberOfProducts)
             when_createProduct(ProductModel.getFake());
 
+        List<ProductModel> products = when_getAllProducts();
         return products.subList(products.size() - numberOfProducts, products.size());
     }
 

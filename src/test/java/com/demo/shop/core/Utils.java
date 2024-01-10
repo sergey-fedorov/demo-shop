@@ -17,7 +17,7 @@ public class Utils {
         return getRandomIntWithinRange(0, list.size() - 1);
     }
 
-    public static int getRandomPositiveInt(int max) {
+    public static int getRandomPositiveIntWithLimit(int max) {
         return getRandomIntWithinRange(1, max);
     }
 
