@@ -84,6 +84,27 @@ Tools: RestAssured
   <img src="https://github.com/sergey-fedorov/demo-shop/assets/11277217/c6d458e6-59ca-4cee-acc2-3c9987b1d0b5"/>
 </p>
 
+## State-transition testing
+Popular black-box test design technique to express complex logic and interactions in a compact notation.
+This technique is ideal for testing transitions between different order statuses of AUT.
+
+1. Create state-transition diagram that includes all order statuses and indicates application events that trigger status changing.
+<p align="center">
+  <img  width="450" src="https://github.com/sergey-fedorov/demo-shop/assets/11277217/b9bbdb37-57d8-4f81-b12d-2b21a8377121"/>
+</p>
+
+2. Create state-transition table based on diagram where each line is a transitions (represented by an arrow on diagram).
+<p align="center">
+  <img width="700" src="https://github.com/sergey-fedorov/demo-shop/assets/11277217/24dfae60-ba90-41cc-8af3-29541ba33256"/>
+</p>
+
+3. Create test cases based on table and make sure all transitions are covered.
+<p align="center">
+  <img width="450" src="https://github.com/sergey-fedorov/demo-shop/assets/11277217/e4ffb66f-499c-470c-a8d0-0dfe55a90add"/>
+</p>
+
+
+
 ## Todo
 
 - [ ] README: Add brief description for test level sections
@@ -91,8 +112,14 @@ Tools: RestAssured
 - [ ] TEST: Add componen tests
 - [ ] TEST: Add Pact Broker for contracts sharing
 - [ ] TEST: Add more E2E tests
-- [ ] README: Create state transition diagram for order statuses and tests based on it
 - [ ] README: Describe test automation framework used for E2E tests
 - [ ] TEST: Add logging library
 - [ ] TEST: Add reporting for E2E tests
 - [x] APP: Add Swagger Specification
+- [x] README: Create state transition diagram for order statuses and tests based on it
+
+
+
+
+
+
