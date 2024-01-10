@@ -46,7 +46,7 @@ public class OrderSteps extends BaseApi {
         return Arrays.asList(getResponseAs(OrderModel[].class));
     }
 
-    public OrderModel when_updateStatus(Long orderId){
+    private OrderModel when_updateStatus(Long orderId){
         httpRequest.post(Endpoints.Orders.STATUS,  Map.of("orderId", orderId));
         return getResponseAs(OrderModel.class);
     }

@@ -38,5 +38,9 @@ public class Endpoints {
         public static final String COMPLETE = BASE_URI + "/complete";
     }
 
+    public static class Payment {
+        private static final String BASE_URI = "/api/payment";
 
+        public static final String PROCEED = BASE_URI + "/proceed";
+    }
 }

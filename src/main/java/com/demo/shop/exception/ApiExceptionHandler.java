@@ -83,6 +83,13 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(PaymentServiceException.class)
+    public ResponseEntity<ErrorItem> handle(PaymentServiceException e) {
+        ErrorItem error = new ErrorItem();
+        error.setErrorMessage(e.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
     @Data
     public static class ErrorItem {
         @JsonInclude(JsonInclude.Include.NON_NULL)
