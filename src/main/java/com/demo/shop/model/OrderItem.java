@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 @Entity @Data
 public class OrderItem {
 
@@ -42,7 +45,8 @@ public class OrderItem {
 
     @Transient
     public Double getTotalPrice() {
-        return getProduct().getPrice() * getQuantity();
+        double total = getProduct().getPrice() * getQuantity();
+        return new BigDecimal(total).setScale(1, RoundingMode.HALF_UP).doubleValue();
     }
 
     @Override

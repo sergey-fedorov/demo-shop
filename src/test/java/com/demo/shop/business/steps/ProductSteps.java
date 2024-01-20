@@ -36,4 +36,9 @@ public class ProductSteps extends BaseApi {
         return products.subList(products.size() - numberOfProducts, products.size());
     }
 
+    public ProductModel when_getProductById(long id){
+        httpRequest.getWithPathParams(Endpoints.Products.PRODUCT_BY_ID, "id", id);
+        return getResponseAs(ProductModel.class);
+    }
+
 }

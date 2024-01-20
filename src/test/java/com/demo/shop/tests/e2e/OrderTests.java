@@ -211,6 +211,36 @@ public class OrderTests extends BaseTest {
                 orderRes.getTotalOrderPrice(),
                 "Wrong order price"
         );
+        Assertions.assertEquals(
+                productN1price * productN1Quantity + productN2price * productN2Quantity,
+                orderRes.getOrderItems().stream().mapToDouble(OrderItemModel::getTotalPrice).sum(),
+                "Wrong order price"
+        );
+    }
+
+    @Test
+    public void orderTransactionIdShouldBeSetAfterPaymentSucceeded(){
+        Long orderId = orderSteps.when_getAnyNewOrder().getId();
+        Assertions.assertNull(orderSteps.when_getOrder(orderId).getTransactionId());
+
+        orderSteps.when_pay(new PaymentModel("any", orderId));
+        then_validateStatusCode(HttpStatus.BAD_REQUEST);
+        Assertions.assertNull(orderSteps.when_getOrder(orderId).getTransactionId());
+
+        orderSteps.when_pay(new PaymentModel("card", orderId));
+        then_validateStatusCode(HttpStatus.OK);
+        Assertions.assertNotNull(orderSteps.when_getOrder(orderId).getTransactionId());
+    }
+
+    @Test
+    public void totalOrderItemPriceAndNumberOfProductsShouldBeCalculatedProperly(){
+        Long orderId = orderSteps.when_getAnyNewOrder().getId();
+        OrderModel orderRes = orderSteps.when_getOrder(orderId);
+
+        orderRes.getOrderItems().forEach(item -> {
+            double productPrice = productSteps.when_getProductById(item.getProductId()).getPrice();
+            Assertions.assertEquals(productPrice * item.getQuantity(), item.getTotalPrice(), "Wrong order item price");
+        });
     }
 
 }

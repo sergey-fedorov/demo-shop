@@ -1,6 +1,7 @@
 package com.demo.shop.core;
 
 import com.demo.shop.business.Endpoints;
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.config.HeaderConfig;
 import io.restassured.config.ObjectMapperConfig;
@@ -27,6 +28,7 @@ public abstract class RequestSpecificationFactory {
         if (requestSpecification == null){
             requestSpecification =  new RequestSpecBuilder()
                     .setConfig(getRestAssuredConfig())
+                    .addFilter(new AllureRestAssured())
                     .addFilter(new RequestLoggingFilter())
                     .addFilter(new ResponseLoggingFilter())
                     .setContentType(ContentType.JSON)

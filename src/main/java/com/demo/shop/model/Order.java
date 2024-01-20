@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.*;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -43,7 +45,7 @@ public class Order {
         for (OrderItem op : orderItems) {
             sum += op.getTotalPrice();
         }
-        return sum;
+        return new BigDecimal(sum).setScale(1, RoundingMode.HALF_UP).doubleValue();
     }
 
     @Transient
