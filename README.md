@@ -117,6 +117,7 @@ This technique is ideal for testing transitions between different order statuses
 - [ ] TEST: Add reporting for E2E tests
 - [x] APP: Add Swagger Specification
 - [x] README: Create state transition diagram for order statuses and tests based on it
+- [ ] 
 
 
 
