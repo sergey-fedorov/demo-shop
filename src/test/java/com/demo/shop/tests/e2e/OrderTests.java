@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import static com.demo.shop.core.Validator.*;
@@ -18,6 +19,7 @@ public class OrderTests extends BaseTest {
     DeliverySteps deliverySteps = new DeliverySteps();
     CustomerSteps customerSteps = new CustomerSteps();
     ProductSteps productSteps = new ProductSteps();
+    DecimalFormat twoDecimalPlaces = new DecimalFormat("#.##");
 
     @Test
     public void statusShouldBeChangedFromNewToSucceededToDelivered(){
@@ -207,12 +209,12 @@ public class OrderTests extends BaseTest {
                 "Wrong products number"
         );
         Assertions.assertEquals(
-                productN1price * productN1Quantity + productN2price * productN2Quantity,
+                Double.valueOf(twoDecimalPlaces.format(productN1price * productN1Quantity + productN2price * productN2Quantity)),
                 orderRes.getTotalOrderPrice(),
                 "Wrong order price"
         );
         Assertions.assertEquals(
-                productN1price * productN1Quantity + productN2price * productN2Quantity,
+                Double.valueOf(twoDecimalPlaces.format(productN1price * productN1Quantity + productN2price * productN2Quantity)),
                 orderRes.getOrderItems().stream().mapToDouble(OrderItemModel::getTotalPrice).sum(),
                 "Wrong order price"
         );
@@ -239,7 +241,11 @@ public class OrderTests extends BaseTest {
 
         orderRes.getOrderItems().forEach(item -> {
             double productPrice = productSteps.when_getProductById(item.getProductId()).getPrice();
-            Assertions.assertEquals(productPrice * item.getQuantity(), item.getTotalPrice(), "Wrong order item price");
+            Assertions.assertEquals(
+                    Double.valueOf(twoDecimalPlaces.format(productPrice * item.getQuantity())),
+                    item.getTotalPrice(),
+                    "Wrong order item price"
+            );
         });
     }
 
