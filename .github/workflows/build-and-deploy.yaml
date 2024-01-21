@@ -96,7 +96,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       - name: Execute E2E tests
-        run: mvn '-Dtest=com.demo.shop.tests.e2e.*Tests' test -P remote
+        run: mvn '-Dtest=com.demo.shop.tests.e2e.*Tests' test -P remote -P allure-report
 
       - name: Load test report history
         uses: actions/checkout@v3

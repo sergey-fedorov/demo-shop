@@ -37,6 +37,24 @@
 				<base.uri>http://18.193.88.110</base.uri>
 			</properties>
 		</profile>
+		<profile>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<id>allure-report</id>
+			<properties>
+				<line>-javaagent:"${user.home}/.m2/repository/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"</line>
+			</properties>
+		</profile>
+		<profile>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<id>no-allure-report</id>
+			<properties>
+				<line></line>
+			</properties>
+		</profile>
 	</profiles>
 	<dependencyManagement>
 		<dependencies>
@@ -180,7 +198,7 @@
 						<pact.rootDir>src/test/resources/pacts</pact.rootDir>
 					</systemPropertyVariables>
 					<argLine>
-						-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+						@{line}
 					</argLine>
 				</configuration>
 				<dependencies>
