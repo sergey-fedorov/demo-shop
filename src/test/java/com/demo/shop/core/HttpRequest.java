@@ -1,5 +1,6 @@
 package com.demo.shop.core;
 
+import io.qameta.allure.Step;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -71,6 +72,7 @@ public class HttpRequest {
 
     /* Base HTTP methods */
 
+    @Step("GET {url}")
     private Response doGet(String url, RequestSpecification requestSpecification) {
         Response response = requestSpecification
                 .get(url)
@@ -80,6 +82,7 @@ public class HttpRequest {
         return response;
     }
 
+    @Step("POST {url}")
     private Response doPost(String url, RequestSpecification requestSpecification) {
         Response response = requestSpecification
                 .post(url)
@@ -89,6 +92,7 @@ public class HttpRequest {
         return response;
     }
 
+    @Step("PUT {url}")
     private Response doPut(String url, RequestSpecification requestSpecification) {
         Response response = requestSpecification
                 .put(url)
@@ -98,6 +102,7 @@ public class HttpRequest {
         return response;
     }
 
+    @Step("DELETE {url}")
     private Response doDelete(String url, RequestSpecification requestSpecification) {
         Response response = requestSpecification
                 .delete(url)

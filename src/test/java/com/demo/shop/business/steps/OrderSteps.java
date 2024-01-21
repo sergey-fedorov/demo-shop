@@ -6,6 +6,7 @@ import com.demo.shop.business.models.OrderModel;
 import com.demo.shop.business.models.PaymentModel;
 import com.demo.shop.business.models.ProductModel;
 import com.demo.shop.core.BaseApi;
+import io.qameta.allure.Step;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -20,27 +21,32 @@ public class OrderSteps extends BaseApi {
     CustomerSteps customerSteps = new CustomerSteps();
     ProductSteps productSteps = new ProductSteps();
 
+    @Step
     public OrderModel when_createOrder(OrderModel order){
         httpRequest.post(Endpoints.Orders.ORDERS, order);
         return getResponseAs(OrderModel.class);
     }
 
+    @Step
     public OrderModel when_createOrder(Long customerId, List<OrderItemModel> orderItems){
         OrderModel orderModelReq = OrderModel.builder().customerId(customerId).orderItems(orderItems).build();
         httpRequest.post(Endpoints.Orders.ORDERS, orderModelReq);
         return getResponseAs(OrderModel.class);
     }
 
+    @Step
     public OrderModel when_getOrder(Long orderId){
         httpRequest.getWithPathParams(Endpoints.Orders.ORDER_BY_ID, "id", orderId);
         return getResponseAs(OrderModel.class);
     }
 
+    @Step
     public List<OrderModel> when_getOrderList(){
         httpRequest.get(Endpoints.Orders.ORDERS);
         return Arrays.asList(getResponseAs(OrderModel[].class));
     }
 
+    @Step
     public List<OrderModel> when_getOrderListByStatus(String status){
         httpRequest.getWithQueryParams(Endpoints.Orders.ORDERS, Map.of("status", status));
         return Arrays.asList(getResponseAs(OrderModel[].class));
@@ -51,11 +57,13 @@ public class OrderSteps extends BaseApi {
         return getResponseAs(OrderModel.class);
     }
 
+    @Step
     public Transaction when_pay(PaymentModel paymentModel){
         httpRequest.post(Endpoints.Orders.PAY, paymentModel);
         return getResponseAs(Transaction.class);
     }
 
+    @Step
     public OrderModel when_getAnyNewOrder(){
         List<OrderModel> orderList = when_getOrderListByStatus("NEW");
         if (orderList.isEmpty()){
