@@ -1,6 +1,10 @@
 # demo-shop
 That project has been created to showcase the test development on different levels from unit to end-to-end, building a CI/CD pipeline from scratch, and integrating tests to it for a microservices-based application.
 
+## Table of Contents
+[Application under test](#application-under-test)
+- [External integrations](#external-integrations)
+
 ## Application under test
 AUT has been created using the Spring Boot framework and MySQL database.
 It is a backend app with the simple functionality of an abstract e-commerce solution that allows a customer to place an order with a set of products.
