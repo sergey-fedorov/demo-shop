@@ -1,15 +1,27 @@
 # demo-shop
 That project has been created to showcase the test development on different levels from unit to end-to-end, building a CI/CD pipeline from scratch, and integrating tests to it for a microservices-based application.
 
-## Table of Contents
-[Application under test](#application-under-test)
-- [External integrations](#external-integrations)
+## Table of contents
+- [Application under test](#application-under-test)</br>
+  - [External integrations](#external-integrations)
+  - [Build and deploy](#build-and-deploy)
+- [Test levels](#test-levels)</br>
+  - [Unit tests](#unit-tests)
+  - [Integration tests](#integration-tests)
+    - [DB tests](#db-tests)
+    - [External services tests](#external-services-tests)
+    - [Contract tests](#contract-tests)
+  - [Component tests](#component-tests)
+  - [End-to-end tests](#end-to-end-tests)
+- [Tests integration into CI/CD pipeline](#tests-integration-into-cicd-pipeline)</br>
+- [State-transition testing](#state-transition-testing)</br>
+- [Todo](#todo)
 
 ## Application under test
 AUT has been created using the Spring Boot framework and MySQL database.
 It is a backend app with the simple functionality of an abstract e-commerce solution that allows a customer to place an order with a set of products.
 
-Swagger specs: http://{HOST}:8081/swagger-ui/index.html
+Swagger specs: http://18.193.88.110:8081/swagger-ui/index.html
 
 ### External integrations
 It communicates with three backend services: a third-party email validator and two very basic services for order payment and delivery that are located in the current codebase to reduce deployment and support expenses.
@@ -82,10 +94,14 @@ Tools:
 Mocking: no <br/>
 Tools: RestAssured
 
+## Tests reporting
+Allure reporting tool has been integrated to test automation framework and built into CI/CD pipeline. Report with its history hosted on GitHub Pages: <br/>
+https://sergey-fedorov.github.io/demo-shop/
+
 ## Tests integration into CI/CD pipeline
 
 <p align="center">
-  <img src="https://github.com/sergey-fedorov/demo-shop/assets/11277217/c6d458e6-59ca-4cee-acc2-3c9987b1d0b5"/>
+  <img src="https://github.com/sergey-fedorov/demo-shop/assets/11277217/12b76328-1e5b-420f-9614-3a3a5f235914"/>
 </p>
 
 ## State-transition testing
@@ -118,10 +134,9 @@ This technique is ideal for testing transitions between different order statuses
 - [ ] TEST: Add more E2E tests
 - [ ] README: Describe test automation framework used for E2E tests
 - [ ] TEST: Add logging library
-- [ ] TEST: Add reporting for E2E tests
+- [x] TEST: Add reporting for E2E tests
 - [x] APP: Add Swagger Specification
 - [x] README: Create state transition diagram for order statuses and tests based on it
-- [ ] 
 
 
 
