@@ -13,6 +13,7 @@ That project has been created to showcase the test development on different leve
     - [Contract tests](#contract-tests)
   - [Component tests](#component-tests)
   - [End-to-end tests](#end-to-end-tests)
+- [Tests reporting](#tests-reporting)
 - [Tests integration into CI/CD pipeline](#tests-integration-into-cicd-pipeline)</br>
 - [State-transition testing](#state-transition-testing)</br>
 - [Todo](#todo)
@@ -132,6 +133,7 @@ This technique is ideal for testing transitions between different order statuses
 - [ ] TEST: Add componen tests
 - [ ] TEST: Add Pact Broker for contracts sharing
 - [ ] TEST: Add more E2E tests
+- [ ] TEST: Implement parallel tests execution for E2E tests
 - [ ] README: Describe test automation framework used for E2E tests
 - [ ] TEST: Add logging library
 - [x] TEST: Add reporting for E2E tests
