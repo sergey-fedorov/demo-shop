@@ -34,9 +34,9 @@ jobs:
       - name: Execute integration tests
         run: mvn '-Dtest=com.demo.shop.tests.integration.*Tests' test
       - name: Execute consumer contract tests
-        run: mvn '-Dtest=com.demo.shop.tests.contract.consumer.*Test' test
+        run: mvn '-Dtest=com.demo.shop.tests.contract.consumer.*Test' test -DparallelTests=false
       - name: Execute provider contract tests
-        run: mvn '-Dtest=com.demo.shop.tests.contract.provider.*Test' test
+        run: mvn '-Dtest=com.demo.shop.tests.contract.provider.*Test' test -DparallelTests=false
 
   build:
     needs: test
@@ -96,7 +96,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       - name: Execute E2E tests
-        run: mvn '-Dtest=com.demo.shop.tests.e2e.*Tests' test -P remote -P allure-report
+        run: mvn '-Dtest=com.demo.shop.tests.e2e.*Tests' test -P remote -P allureReport
 
       - name: Load test report history
         uses: actions/checkout@v3

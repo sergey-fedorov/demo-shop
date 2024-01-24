@@ -215,7 +215,7 @@ public class OrderTests extends BaseTest {
         );
         Assertions.assertEquals(
                 Double.valueOf(twoDecimalPlaces.format(productN1price * productN1Quantity + productN2price * productN2Quantity)),
-                orderRes.getOrderItems().stream().mapToDouble(OrderItemModel::getTotalPrice).sum(),
+                Double.valueOf(twoDecimalPlaces.format(orderRes.getOrderItems().stream().mapToDouble(OrderItemModel::getTotalPrice).sum())),
                 "Wrong order price"
         );
     }
