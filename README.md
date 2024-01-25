@@ -14,6 +14,7 @@ That project has been created to showcase the test development on different leve
   - [Component tests](#component-tests)
   - [End-to-end tests](#end-to-end-tests)
 - [Tests reporting](#tests-reporting)
+- [Parallel test execution](#parallel-test-execution)
 - [Tests integration into CI/CD pipeline](#tests-integration-into-cicd-pipeline)</br>
 - [State-transition testing](#state-transition-testing)</br>
 - [Todo](#todo)
@@ -96,8 +97,10 @@ Mocking: no <br/>
 Tools: RestAssured
 
 ## Tests reporting
-Allure reporting tool has been integrated to test automation framework and built into CI/CD pipeline. Report with its history hosted on GitHub Pages: <br/>
-https://sergey-fedorov.github.io/demo-shop/
+Allure reporting tool has been integrated to test automation framework and built into CI/CD pipeline. Report with its history hosted on GitHub Pages: https://sergey-fedorov.github.io/demo-shop/
+
+## Parallel test execution
+Concurrent test execution implemented using Junit (available since version 5.3). It was configured to run classes in parallel and test methods sequentially. Enable/disable parallel test execution controlled via system property `parallelTests`
 
 ## Tests integration into CI/CD pipeline
 
@@ -133,9 +136,9 @@ This technique is ideal for testing transitions between different order statuses
 - [ ] TEST: Add componen tests
 - [ ] TEST: Add Pact Broker for contracts sharing
 - [ ] TEST: Add more E2E tests
-- [ ] TEST: Implement parallel tests execution for E2E tests
 - [ ] README: Describe test automation framework used for E2E tests
 - [ ] TEST: Add logging library
+- [x] TEST: Implement parallel tests execution for E2E tests
 - [x] TEST: Add reporting for E2E tests
 - [x] APP: Add Swagger Specification
 - [x] README: Create state transition diagram for order statuses and tests based on it
