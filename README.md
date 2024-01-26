@@ -1,6 +1,6 @@
 # demo-shop
-That project has been created to showcase the test development on different levels from unit to end-to-end, building a CI/CD pipeline from scratch, and integrating tests to it for a microservices-based application. </br>
-Technologies: Java, Maven, Spring Boot, MySQL, Lombok, Junit 5, RestAssured, WireMock, Pact, Testcontainers, Allure
+That project has been created to showcase the test development on different levels from unit to end-to-end, building a CI/CD pipeline from scratch, and integrating tests to it for a microservices-based application. </br></br>
+**Technologies:** Java, Maven, Spring Boot, MySQL, Lombok, Junit 5, RestAssured, WireMock, Pact, Testcontainers, Allure, Docker, GitHub Actions
 
 ## Table of contents
 - [Application under test](#application-under-test)</br>
