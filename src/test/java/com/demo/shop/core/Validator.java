@@ -9,13 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Validator {
 
-    protected static HttpRequest httpRequest;
-
-    static {
-        httpRequest = new HttpRequest();
-    }
-
-
     public static String getJsonValueAsString(String jsonField){
         return validateResponse()
                 .body("$", hasKey(jsonField))
@@ -23,8 +16,8 @@ public class Validator {
                 .get(jsonField).toString();
     }
 
-    public static ValidatableResponse validateResponse(){
-        return httpRequest.getResponse()
+    private static ValidatableResponse validateResponse(){
+        return HttpResponse.get()
                 .then()
                 .assertThat();
     }

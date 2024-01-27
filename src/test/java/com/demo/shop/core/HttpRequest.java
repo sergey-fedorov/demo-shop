@@ -10,20 +10,19 @@ import java.util.Map;
 
 public class HttpRequest {
 
+    private static HttpRequest instance;
+    private HttpRequest(){}
+
+    public static HttpRequest getInstance(){
+        if(instance == null){
+            instance = new HttpRequest();
+        }
+        return instance;
+    }
+
     private RequestSpecification getRequestSpecification(){
         return RestAssured.given().spec(RequestSpecificationFactory.getBaseRequestSpecification());
     }
-
-    private static final ThreadLocal<Response> response = new ThreadLocal<>();
-
-    private void setResponse(Response resp){
-        response.set(resp);
-    }
-
-    public Response getResponse(){
-        return response.get();
-    }
-
 
     /* Custom HTTP methods */
 
@@ -78,7 +77,7 @@ public class HttpRequest {
                 .get(url)
                 .then()
                 .extract().response();
-        setResponse(response);
+        HttpResponse.set(response);
         return response;
     }
 
@@ -88,7 +87,7 @@ public class HttpRequest {
                 .post(url)
                 .then()
                 .extract().response();
-        setResponse(response);
+        HttpResponse.set(response);
         return response;
     }
 
@@ -98,7 +97,7 @@ public class HttpRequest {
                 .put(url)
                 .then()
                 .extract().response();
-        setResponse(response);
+        HttpResponse.set(response);
         return response;
     }
 
@@ -108,7 +107,7 @@ public class HttpRequest {
                 .delete(url)
                 .then()
                 .extract().response();
-        setResponse(response);
+        HttpResponse.set(response);
         return response;
     }
 
