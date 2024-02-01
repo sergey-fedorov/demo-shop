@@ -35,7 +35,7 @@
 			</activation>
 			<id>remote</id>
 			<properties>
-				<base.uri>http://18.193.88.110</base.uri>
+				<base.uri>http://3.76.217.31</base.uri>
 			</properties>
 		</profile>
 		<profile>

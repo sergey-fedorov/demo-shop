@@ -9,17 +9,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Validator {
 
+    private static ValidatableResponse validateResponse(){
+        return HttpResponse.get()
+                .then()
+                .assertThat();
+    }
+
     public static String getJsonValueAsString(String jsonField){
         return validateResponse()
                 .body("$", hasKey(jsonField))
                 .extract().response().jsonPath()
                 .get(jsonField).toString();
-    }
-
-    private static ValidatableResponse validateResponse(){
-        return HttpResponse.get()
-                .then()
-                .assertThat();
     }
 
     @Step
