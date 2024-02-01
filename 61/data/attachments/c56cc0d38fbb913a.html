@@ -1,0 +1,28 @@
+<div>POST to http://3.76.217.31:8081/api/customers</div>
+
+<h4>Body</h4>
+<div>
+    <pre class="preformated-text">
+{
+    &quot;fullName&quot;: &quot;Asia Oberbrunner&quot;,
+    &quot;address&quot;: &quot;Suite 693 06768 Chas Trail, Kyungside, IA 41075-4929&quot;,
+    &quot;email&quot;: &quot;ronald.wiegand@yahoo.com&quot;
+}    </pre>
+</div>
+
+<h4>Headers</h4>
+<div>
+        <div>accept: application/json</div>
+        <div>Content-Type: application/json</div>
+</div>
+
+
+
+<h4>Curl</h4>
+<div>
+curl -v -X POST &#39;http://3.76.217.31:8081/api/customers&#39; -H &#39;accept: application/json&#39; -H &#39;Content-Type: application/json&#39; -d &#39;{
+    &quot;fullName&quot;: &quot;Asia Oberbrunner&quot;,
+    &quot;address&quot;: &quot;Suite 693 06768 Chas Trail, Kyungside, IA 41075-4929&quot;,
+    &quot;email&quot;: &quot;ronald.wiegand@yahoo.com&quot;
+}&#39;
+</div>
