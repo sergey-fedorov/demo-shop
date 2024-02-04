@@ -1,4 +1,4 @@
-package com.demo.shop.tests.unit;
+package com.demo.shop.tests.component;
 
 import com.demo.shop.controller.CustomerController;
 import com.demo.shop.dto.EmailValidatorDto;
