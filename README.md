@@ -67,13 +67,13 @@ Application acts as consumer for payment and email-validator services, and as pr
 </p>
 
 #### DB tests
-Focus on the CRUD operations between application data layer and DB.
+Focus on the application data access layer functionality that is in charge of CRUD operations for communication with DB.
 
 Mocking: yes, replace the real DB <br/>
 Tools: Testcontainers
 
 #### External services tests
-Focus on the communication interface with other services.
+Focus on the application functionality that is responsible for communication with other services. 
 
 Mocking: yes, all other services <br/>
 Tools: WireMock
@@ -90,12 +90,19 @@ On provider side tests the data layer should be mocked as well as external servi
 One of the challenges is a communication between consumer and provider to share the updated contract file.
 
 ### Component tests
-Mocking: <br/>
-Tools:
+Focus on the service as a separate component with mocked integrations.
+
+Mocking: yes <br/>
+Tools: WireMock, Testcontainers
 
 ### End-to-end tests
+Focus on the behavior of the fully integrated system.
+
 Mocking: no <br/>
 Tools: RestAssured
+
+Side note: The system should use real third-party integrations to mimic the production, mocks can be used in exceptional situations.
+Tests should cover the most important user journeys. Do not write tests for the functionality that has been already covered on lower levels in test pyramid.
 
 ## Tests reporting
 Allure reporting tool has been integrated to test automation framework and built into CI/CD pipeline. Report with its history hosted on GitHub Pages: https://sergey-fedorov.github.io/demo-shop/
@@ -132,13 +139,13 @@ This technique is ideal for testing transitions between different order statuses
 
 ## Todo
 
-- [ ] README: Add brief description for test level sections
 - [ ] APP: Add JaCoCo code coverage library, add it to ci/cd
-- [ ] TEST: Add componen tests
+- [ ] TEST: Add component tests
 - [ ] TEST: Add Pact Broker for contracts sharing
 - [ ] TEST: Add more E2E tests
 - [ ] README: Describe test automation framework used for E2E tests
 - [ ] TEST: Add logging library
+- [x] README: Add brief description for test level sections
 - [x] TEST: Implement parallel tests execution for E2E tests
 - [x] TEST: Add reporting for E2E tests
 - [x] APP: Add Swagger Specification
