@@ -52,7 +52,7 @@ public class OrderSteps extends BaseApi {
         return Arrays.asList(getResponseAs(OrderModel[].class));
     }
 
-    private OrderModel when_updateStatus(Long orderId){
+    public OrderModel when_updateStatus(Long orderId){
         httpRequest.post(Endpoints.Orders.STATUS,  Map.of("orderId", orderId));
         return getResponseAs(OrderModel.class);
     }

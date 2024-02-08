@@ -31,6 +31,8 @@ public class Endpoints {
         public static final String CUSTOMER_BY_ID = BASE_URI + "/{id}";
     }
 
+    /* Third-party services */
+
     public static class Delivery {
         private static final String BASE_URI = "/api/delivery";
 

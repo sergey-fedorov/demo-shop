@@ -29,8 +29,10 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+      - name: Execute unit tests
+        run: mvn '-Dtest=com.demo.shop.tests.unit.*Tests' test
       - name: Execute component tests
-        run: mvn '-Dtest=com.demo.shop.tests.component.*Test' test
+        run: mvn '-Dtest=com.demo.shop.tests.component.*Tests' test
       - name: Execute integration tests
         run: mvn '-Dtest=com.demo.shop.tests.integration.*Tests' test
       - name: Execute consumer contract tests

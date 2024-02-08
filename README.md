@@ -56,7 +56,7 @@ Test Pyramid for microservices-based application will contain the following leve
 * End-to-end
 
 ### Unit tests
-Focus on the application methods separately (Service & Controller layers).
+Focus on the application classes and methods in isolation.
 
 Mocking: yes <br/>
 Tools: Mockito
@@ -92,10 +92,10 @@ On provider side tests the data layer should be mocked as well as external servi
 One of the challenges is a communication between consumer and provider to share the updated contract file.
 
 ### Component tests
-Focus on the service as a separate component with mocked integrations  (Controller layer).
+Focus on the service as a separate component with mocked integrations.
 
 Mocking: yes <br/>
-Tools: Mockito, MockMvc
+Tools: Testcontainers, WireMock
 
 ### End-to-end tests
 Focus on the behavior of the fully integrated system.
@@ -142,11 +142,11 @@ This technique is ideal for testing transitions between different order statuses
 ## Todo
 
 - [ ] APP: Add JaCoCo code coverage library, add it to ci/cd
-- [ ] TEST: Add unit tests
 - [ ] TEST: Add Pact Broker for contracts sharing
-- [ ] TEST: Add more E2E tests
+- [ ] TEST: Add more low level tests to replace E2E tests
 - [ ] README: Describe test automation framework used for E2E tests
 - [ ] TEST: Add logging library
+- [x] TEST: Add component tests
 - [x] README: Add brief description for test level sections
 - [x] TEST: Implement parallel tests execution for E2E tests
 - [x] TEST: Add reporting for E2E tests

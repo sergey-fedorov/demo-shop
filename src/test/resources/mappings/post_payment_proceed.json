@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPattern": "/api/payment/proceed"
+  },
+
+  "response": {
+    "status": 200,
+    "jsonBody": { "transactionId": 999 },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

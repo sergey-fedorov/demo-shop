@@ -1,4 +1,4 @@
-package com.demo.shop.tests.component;
+package com.demo.shop.tests.unit;
 
 import com.demo.shop.controller.CustomerController;
 import com.demo.shop.dto.EmailValidatorDto;
@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(CustomerController.class)
-public class CustomerControllerTest {
+public class CustomerControllerTests {
 
     /* @WebMvcTest is limited to a single controller and is used in combination
      with @MockBean to provide mock implementations for required collaborators.

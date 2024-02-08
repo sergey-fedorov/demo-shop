@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPattern": "/api/email/.*"
+  },
+
+  "response": {
+    "status": 200,
+    "jsonBody": { "format": true, "domain": "example.com", "disposable": false, "dns":  true },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

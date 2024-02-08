@@ -20,6 +20,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,9 @@ public class OrderController {
     OrderItemService orderItemService;
     @Autowired
     CustomerService customerService;
+
+    @Value("${api.payment.service}")
+    private String apiPaymentService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -137,7 +141,7 @@ public class OrderController {
         HttpEntity<PaymentRequest> request = new HttpEntity<>(paymentRequest, headers);
 
         try {
-            PaymentResponse response = restTemplate.postForObject("http://localhost:8081/api/payment/proceed", request, PaymentResponse.class);
+            PaymentResponse response = restTemplate.postForObject(apiPaymentService + "/api/payment/proceed", request, PaymentResponse.class);
             if (response != null)
                 transactionId = response.getTransactionId();
             else
