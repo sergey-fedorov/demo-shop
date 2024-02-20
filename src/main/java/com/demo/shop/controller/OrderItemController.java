@@ -12,6 +12,7 @@ import com.demo.shop.service.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public class OrderItemController {
     private ProductService productService;
 
     @DeleteMapping
-    public void deleteOrderItem(@RequestBody OrderItemForm orderItemForm){
+    public ResponseEntity<?> deleteOrderItem(@RequestBody OrderItemForm orderItemForm){
         Order order = orderService.get(orderItemForm.getOrderId());
 
         Long orderOwnerCustomerId = order.getCustomer().getId();
@@ -47,8 +48,10 @@ public class OrderItemController {
         orderItemPK.setProduct(productService.getProduct(orderItemForm.getProductId()));
         orderItemService.delete(orderItemPK);
 
-        if (order.getOrderItems().isEmpty())
+        if (order.getOrderItems().size() == 1)
             orderService.delete(order.getId());
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping
@@ -75,7 +78,7 @@ public class OrderItemController {
     }
 
 
-    @Data
+    @Data @Accessors(chain = true)
     public static class OrderItemForm {
         private long customerId;
         private long orderId;
