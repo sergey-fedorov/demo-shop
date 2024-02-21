@@ -143,9 +143,9 @@ This technique is ideal for testing transitions between different order statuses
 
 - [ ] APP: Add JaCoCo code coverage library, add it to ci/cd
 - [ ] TEST: Add Pact Broker for contracts sharing
-- [ ] TEST: Add more low level tests to replace E2E tests
 - [ ] README: Describe test automation framework used for E2E tests
 - [ ] TEST: Add logging library
+- [x] TEST: Add more low level tests to replace E2E tests
 - [x] TEST: Add component tests
 - [x] README: Add brief description for test level sections
 - [x] TEST: Implement parallel tests execution for E2E tests

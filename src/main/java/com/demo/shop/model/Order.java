@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Entity @Table(name = "orders") @Data
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="orderItems")
-@Builder @NoArgsConstructor @AllArgsConstructor
+@Builder @NoArgsConstructor @AllArgsConstructor @Accessors(chain = true)
 public class Order {
 
     @Id

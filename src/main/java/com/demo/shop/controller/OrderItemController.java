@@ -11,6 +11,7 @@ import com.demo.shop.service.OrderService;
 import com.demo.shop.service.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class OrderItemController {
     private ProductService productService;
 
     @DeleteMapping
-    public ResponseEntity<?> deleteOrderItem(@RequestBody OrderItemForm orderItemForm){
+    public ResponseEntity<?> deleteOrderItem(@Valid @RequestBody OrderItemForm orderItemForm){
         Order order = orderService.get(orderItemForm.getOrderId());
 
         Long orderOwnerCustomerId = order.getCustomer().getId();
@@ -80,9 +81,13 @@ public class OrderItemController {
 
     @Data @Accessors(chain = true)
     public static class OrderItemForm {
+        @Min(1)
         private long customerId;
+        @Min(1)
         private long orderId;
+        @Min(1)
         private long productId;
+        @Min(1)
         private int quantity;
     }
 

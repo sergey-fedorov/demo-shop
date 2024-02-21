@@ -18,8 +18,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,23 +50,25 @@ public class OrderItemControllerTests {
     OrderItem orderItem = new OrderItem(order, product, 2);
     OrderItem orderItemTwo = new OrderItem(order, productTwo, 2);
 
-    OrderItemController.OrderItemForm orderItemForm = new OrderItemController.OrderItemForm();
+    OrderItemController.OrderItemForm orderItemFormBody = new OrderItemController.OrderItemForm();
 
     @BeforeEach
     public void setUp() {
-        order.setOrderItems(List.of(orderItem, orderItemTwo));
-        orderItemForm.setOrderId(1L).setCustomerId(1).setQuantity(1).setProductId(1);
+        order.setOrderItems(new ArrayList<>(List.of(orderItem, orderItemTwo)));
+        orderItemFormBody.setOrderId(1L).setCustomerId(1).setQuantity(1).setProductId(1);
+
+        doNothing().when(orderItemService).delete(new OrderItemPK());
+        when(orderService.get(anyLong())).thenReturn(order);
+        when(orderItemService.create(orderItem)).thenReturn(orderItem);
+        when(productService.getProduct(anyLong())).thenReturn(product);
     }
 
 
     @Test
     public void deleteOrderItem_validOrderItem_shouldBeDeleted() throws Exception {
-        doNothing().when(orderItemService).delete(new OrderItemPK());
-        when(orderService.get(anyLong())).thenReturn(order);
-
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/api/order-items")
-                .content(new ObjectMapper().writeValueAsString(orderItemForm))
+                .content(new ObjectMapper().writeValueAsString(orderItemFormBody))
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(requestBuilder)
@@ -74,14 +78,11 @@ public class OrderItemControllerTests {
 
     @Test
     public void deleteOrderItem_wrongCustomerId_shouldThrowForbidden() throws Exception {
-        orderItemForm.setCustomerId(2);
-
-        doNothing().when(orderItemService).delete(new OrderItemPK());
-        when(orderService.get(anyLong())).thenReturn(order);
+        OrderItemController.OrderItemForm orderItemFormWrongCustomerId = orderItemFormBody.setCustomerId(2);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/api/order-items")
-                .content(new ObjectMapper().writeValueAsString(orderItemForm))
+                .content(new ObjectMapper().writeValueAsString(orderItemFormWrongCustomerId))
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(requestBuilder)
@@ -94,12 +95,9 @@ public class OrderItemControllerTests {
     public void deleteOrderItem_notNewOrderStatus_shouldThrowBadRequest() throws Exception {
         order.setStatus(OrderStatus.DELIVERED.name());
 
-        doNothing().when(orderItemService).delete(new OrderItemPK());
-        when(orderService.get(anyLong())).thenReturn(order);
-
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/api/order-items")
-                .content(new ObjectMapper().writeValueAsString(orderItemForm))
+                .content(new ObjectMapper().writeValueAsString(orderItemFormBody))
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(requestBuilder)
@@ -110,12 +108,9 @@ public class OrderItemControllerTests {
 
     @Test
     public void deleteOrderItem_notLastOrderItem_orderShouldNotBeDeleted() throws Exception {
-        doNothing().when(orderItemService).delete(new OrderItemPK());
-        when(orderService.get(anyLong())).thenReturn(order);
-
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/api/order-items")
-                .content(new ObjectMapper().writeValueAsString(orderItemForm))
+                .content(new ObjectMapper().writeValueAsString(orderItemFormBody))
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(requestBuilder)
@@ -127,15 +122,12 @@ public class OrderItemControllerTests {
 
     @Test
     public void deleteOrderItem_lastOrderItem_orderShouldBeDeleted() throws Exception {
-        doNothing().when(orderItemService).delete(new OrderItemPK());
-        when(orderService.get(anyLong())).thenReturn(order);
-
         // one order item in order
         order.setOrderItems(List.of(orderItem));
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/api/order-items")
-                .content(new ObjectMapper().writeValueAsString(orderItemForm))
+                .content(new ObjectMapper().writeValueAsString(orderItemFormBody))
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(requestBuilder)
@@ -143,6 +135,106 @@ public class OrderItemControllerTests {
                 .andExpect(status().isOk());
 
         verify(orderService, times(1)).delete(null);
+    }
+
+    @Test
+    public void deleteOrderItem_valuesLessThan1_shouldThrowBadRequest() throws Exception {
+        OrderItemController.OrderItemForm orderItemFormInvalidValues =
+                orderItemFormBody.setOrderId(0).setCustomerId(0).setQuantity(0).setProductId(0);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .delete("/api/order-items")
+                .content(new ObjectMapper().writeValueAsString(orderItemFormInvalidValues))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void deleteOrderItem_missingFields_shouldThrowBadRequest() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .delete("/api/order-items")
+                .content("{}")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void deleteOrderItem_missingOrderIdField_shouldThrowBadRequest() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .delete("/api/order-items")
+                .content("{\"customerId\":1,\"productId\":1,\"quantity\":1}")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void createOrderItem_validOrderItem_shouldBeCreated() throws Exception {
+        OrderItemController.OrderItemForm orderItemFormThirdValid =
+                orderItemFormBody.setOrderId(1L).setCustomerId(1).setQuantity(1).setProductId(3);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/order-items")
+                .content(new ObjectMapper().writeValueAsString(orderItemFormThirdValid))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.orderItems", hasSize(3)));
+    }
+
+    @Test
+    public void createOrderItem_wrongCustomerId_shouldThrowForbidden() throws Exception {
+        OrderItemController.OrderItemForm orderItemFormWrongCustomerId = orderItemFormBody.setCustomerId(2);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/order-items")
+                .content(new ObjectMapper().writeValueAsString(orderItemFormWrongCustomerId))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.errorMessage").value("Order doesn't belong to specified customer"));
+    }
+
+    @Test
+    public void createOrderItem_notNewOrderStatus_shouldThrowBadRequest() throws Exception {
+        order.setStatus(OrderStatus.DELIVERED.name());
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/order-items")
+                .content(new ObjectMapper().writeValueAsString(orderItemFormBody))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorMessage").value("Cannot add item to a not new order"));
+    }
+
+    @Test
+    public void createOrderItem_existingOrderItem_shouldThrowBadRequest() throws Exception {
+        OrderItemController.OrderItemForm orderItemFormExistingOrderItem = orderItemFormBody.setProductId(1L);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/order-items")
+                .content(new ObjectMapper().writeValueAsString(orderItemFormExistingOrderItem))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorMessage").value("Cannot add item with product that already added to order"));
     }
 
 
