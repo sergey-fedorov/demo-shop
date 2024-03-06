@@ -72,7 +72,7 @@ jobs:
         if: steps.changes.outputs.docker-compose == 'true'
         uses: appleboy/scp-action@v0.1.4
         with:
-          host: 3.76.203.40
+          host: 18.185.248.105
           username: ${{ secrets.EC2_SSH_USER }}
           password: ${{ secrets.EC2_SSH_PASSWORD }}
           port: 22
