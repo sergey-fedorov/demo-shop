@@ -14,7 +14,7 @@ That project has been created to showcase the test development on different leve
     - [Contract tests](#contract-tests)
   - [Component tests](#component-tests)
   - [End-to-end tests](#end-to-end-tests)
-    - [Test framework class diagram](#test-framework-diagram)
+    - [Test framework class diagram](#test-framework-class-diagram)
     - [Tests reporting](#tests-reporting)
 - [Parallel test execution](#parallel-test-execution)
 - [Tests integration into CI/CD pipeline](#tests-integration-into-cicd-pipeline)</br>
