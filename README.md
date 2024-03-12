@@ -122,7 +122,7 @@ Concurrent test execution implemented using Junit (available since version 5.3).
 ## Tests integration into CI/CD pipeline
 
 <p align="center">
-  <img src="https://github.com/sergey-fedorov/demo-shop/assets/11277217/12b76328-1e5b-420f-9614-3a3a5f235914"/>
+  <img src="https://github.com/sergey-fedorov/demo-shop/assets/11277217/5cab2653-beba-4528-9036-bb3820bff0dd"/>
 </p>
 
 ## State-transition testing
