@@ -22,7 +22,7 @@ class OrderTests extends BaseTest {
     DecimalFormat twoDecimalPlaces = new DecimalFormat("#.##");
 
     @Test
-    void statusShouldBeChangedFromNewToSucceededToDelivered(){
+    void DS_T1_statusShouldBeChangedFromNewToSucceededToDelivered(){
         Long customerId = customerSteps.when_getAnyCustomer().getId();
         Long productId = productSteps.when_getAnyProduct().getId();
 
@@ -54,7 +54,7 @@ class OrderTests extends BaseTest {
     }
 
     @Test
-    void statusShouldBeChangedFromNewToFailedToSucceeded(){
+    void DS_T2_statusShouldBeChangedFromNewToFailedToSucceeded(){
         Long orderId = orderSteps.when_getAnyNewOrder().getId();
 
         orderSteps.when_pay(new PaymentModel("any", orderId));

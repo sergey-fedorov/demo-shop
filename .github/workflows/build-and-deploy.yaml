@@ -123,3 +123,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: allure-history
+
+      - name: Send results to Zephyr cycle
+        run: ./zephyr-sync.sh DS ${{ secrets.ZEPHYR_TOKEN }}

@@ -19,7 +19,7 @@ class CustomerTests extends BaseTest {
     CustomerSteps customerSteps = new CustomerSteps();
 
     @Test
-    void newCustomerCreatedWithValidDetails(){
+    void DS_T3_newCustomerCreatedWithValidDetails(){
         CustomerModel customerReqBody = CustomerModel.getFake();
 
         CustomerModel customerResBody = customerSteps.when_createCustomer(customerReqBody);
@@ -31,7 +31,7 @@ class CustomerTests extends BaseTest {
     }
 
     @Test
-    void cannotCreateCustomerWithEmptyFields(){
+    void DS_T4_cannotCreateCustomerWithEmptyFields(){
         CustomerModel customerReqBody = CustomerModel.getFake()
                 .setFullName("");
         customerSteps.when_createCustomer(customerReqBody);
