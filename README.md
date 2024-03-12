@@ -14,7 +14,8 @@ That project has been created to showcase the test development on different leve
     - [Contract tests](#contract-tests)
   - [Component tests](#component-tests)
   - [End-to-end tests](#end-to-end-tests)
-- [Tests reporting](#tests-reporting)
+    - [Test framework class diagram](#test-framework-class-diagram)
+    - [Tests reporting](#tests-reporting)
 - [Parallel test execution](#parallel-test-execution)
 - [Tests integration into CI/CD pipeline](#tests-integration-into-cicd-pipeline)</br>
 - [State-transition testing](#state-transition-testing)</br>
@@ -106,7 +107,13 @@ Tools: RestAssured
 Side note: The system should use real third-party integrations to mimic the production, mocks can be used in exceptional situations.
 Tests should cover the most important user journeys. Do not write tests for the functionality that has been already covered on lower levels in test pyramid.
 
-## Tests reporting
+#### Test framework class diagram
+
+<p align="center">
+  <img  width="700" src="https://github.com/sergey-fedorov/demo-shop/assets/11277217/716b0e83-763d-47f3-8060-38000b3d9054"/>
+</p>
+
+#### Tests reporting
 Allure reporting tool has been integrated to test automation framework and built into CI/CD pipeline. Report with its history hosted on GitHub Pages: https://sergey-fedorov.github.io/demo-shop/
 
 ## Parallel test execution
