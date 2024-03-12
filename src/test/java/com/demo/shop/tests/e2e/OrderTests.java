@@ -13,7 +13,7 @@ import java.util.List;
 
 import static com.demo.shop.core.Validator.*;
 
-public class OrderTests extends BaseTest {
+class OrderTests extends BaseTest {
 
     OrderSteps orderSteps = new OrderSteps();
     DeliverySteps deliverySteps = new DeliverySteps();
@@ -22,7 +22,7 @@ public class OrderTests extends BaseTest {
     DecimalFormat twoDecimalPlaces = new DecimalFormat("#.##");
 
     @Test
-    public void statusShouldBeChangedFromNewToSucceededToDelivered(){
+    void statusShouldBeChangedFromNewToSucceededToDelivered(){
         Long customerId = customerSteps.when_getAnyCustomer().getId();
         Long productId = productSteps.when_getAnyProduct().getId();
 
@@ -54,7 +54,7 @@ public class OrderTests extends BaseTest {
     }
 
     @Test
-    public void statusShouldBeChangedFromNewToFailedToSucceeded(){
+    void statusShouldBeChangedFromNewToFailedToSucceeded(){
         Long orderId = orderSteps.when_getAnyNewOrder().getId();
 
         orderSteps.when_pay(new PaymentModel("any", orderId));
@@ -73,7 +73,7 @@ public class OrderTests extends BaseTest {
     }
 
     @Test
-    public void shouldNotBePossibleToPayForPaidOrderAndStatusRemains(){
+    void shouldNotBePossibleToPayForPaidOrderAndStatusRemains(){
         Long orderId = orderSteps.when_getAnyNewOrder().getId();
         orderSteps.when_pay(new PaymentModel("card", orderId));
 
@@ -95,7 +95,7 @@ public class OrderTests extends BaseTest {
     }
 
     @Test
-    public void shouldNotBePossibleToDeliverOrPayForDeliveredOrderAndStatusRemains(){
+    void shouldNotBePossibleToDeliverOrPayForDeliveredOrderAndStatusRemains(){
         Long orderId = orderSteps.when_getAnyNewOrder().getId();
         orderSteps.when_pay(new PaymentModel("card", orderId));
         deliverySteps.when_deliver(orderId);
@@ -127,7 +127,7 @@ public class OrderTests extends BaseTest {
     }
 
     @Test
-    public void shouldNotBePossibleToDeliverNewOrderAndStatusRemains(){
+    void shouldNotBePossibleToDeliverNewOrderAndStatusRemains(){
         Long orderId = orderSteps.when_getAnyNewOrder().getId();
 
         deliverySteps.when_deliver(orderId);
@@ -140,7 +140,7 @@ public class OrderTests extends BaseTest {
     }
 
     @Test
-    public void shouldNotBePossibleToDeliverFailedOrderAndStatusRemains(){
+    void shouldNotBePossibleToDeliverFailedOrderAndStatusRemains(){
         Long orderId = orderSteps.when_getAnyNewOrder().getId();
         orderSteps.when_pay(new PaymentModel("any", orderId));
 
@@ -162,7 +162,7 @@ public class OrderTests extends BaseTest {
     }
 
     @Test
-    public void shouldNotBePossibleToCreateOrderWithDuplicateProducts(){
+    void shouldNotBePossibleToCreateOrderWithDuplicateProducts(){
         Long customerId = customerSteps.when_getAnyCustomer().getId();
         Long productId = productSteps.when_getAnyProduct().getId();
         List<OrderItemModel> orderItems = List.of(
@@ -175,7 +175,7 @@ public class OrderTests extends BaseTest {
     }
 
     @Test
-    public void totalOrderPriceAndNumberOfProductsShouldBeCalculatedProperly(){
+    void totalOrderPriceAndNumberOfProductsShouldBeCalculatedProperly(){
         int numberOfProductsInOrder = 2;
         int productN1Quantity = 1;
         int productN2Quantity = 2;
@@ -221,7 +221,7 @@ public class OrderTests extends BaseTest {
     }
 
     @Test
-    public void orderTransactionIdShouldBeSetAfterPaymentSucceeded(){
+    void orderTransactionIdShouldBeSetAfterPaymentSucceeded(){
         Long orderId = orderSteps.when_getAnyNewOrder().getId();
         Assertions.assertNull(orderSteps.when_getOrder(orderId).getTransactionId());
 
@@ -235,7 +235,7 @@ public class OrderTests extends BaseTest {
     }
 
     @Test
-    public void totalOrderItemPriceAndNumberOfProductsShouldBeCalculatedProperly(){
+    void totalOrderItemPriceAndNumberOfProductsShouldBeCalculatedProperly(){
         Long orderId = orderSteps.when_getAnyNewOrder().getId();
         OrderModel orderRes = orderSteps.when_getOrder(orderId);
 

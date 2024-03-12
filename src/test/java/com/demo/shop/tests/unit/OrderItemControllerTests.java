@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(OrderItemController.class)
-public class OrderItemControllerTests {
+class OrderItemControllerTests {
 
     @Autowired
     MockMvc mockMvc;
@@ -53,7 +53,7 @@ public class OrderItemControllerTests {
     OrderItemController.OrderItemForm orderItemFormBody = new OrderItemController.OrderItemForm();
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         order.setOrderItems(new ArrayList<>(List.of(orderItem, orderItemTwo)));
         orderItemFormBody.setOrderId(1L).setCustomerId(1).setQuantity(1).setProductId(1);
 
@@ -65,7 +65,7 @@ public class OrderItemControllerTests {
 
 
     @Test
-    public void deleteOrderItem_validOrderItem_shouldBeDeleted() throws Exception {
+    void deleteOrderItem_validOrderItem_shouldBeDeleted() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/api/order-items")
                 .content(new ObjectMapper().writeValueAsString(orderItemFormBody))
@@ -77,7 +77,7 @@ public class OrderItemControllerTests {
     }
 
     @Test
-    public void deleteOrderItem_wrongCustomerId_shouldThrowForbidden() throws Exception {
+    void deleteOrderItem_wrongCustomerId_shouldThrowForbidden() throws Exception {
         OrderItemController.OrderItemForm orderItemFormWrongCustomerId = orderItemFormBody.setCustomerId(2);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
@@ -92,7 +92,7 @@ public class OrderItemControllerTests {
     }
 
     @Test
-    public void deleteOrderItem_notNewOrderStatus_shouldThrowBadRequest() throws Exception {
+    void deleteOrderItem_notNewOrderStatus_shouldThrowBadRequest() throws Exception {
         order.setStatus(OrderStatus.DELIVERED.name());
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
@@ -107,7 +107,7 @@ public class OrderItemControllerTests {
     }
 
     @Test
-    public void deleteOrderItem_notLastOrderItem_orderShouldNotBeDeleted() throws Exception {
+    void deleteOrderItem_notLastOrderItem_orderShouldNotBeDeleted() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/api/order-items")
                 .content(new ObjectMapper().writeValueAsString(orderItemFormBody))
@@ -121,7 +121,7 @@ public class OrderItemControllerTests {
     }
 
     @Test
-    public void deleteOrderItem_lastOrderItem_orderShouldBeDeleted() throws Exception {
+    void deleteOrderItem_lastOrderItem_orderShouldBeDeleted() throws Exception {
         // one order item in order
         order.setOrderItems(List.of(orderItem));
 
@@ -138,7 +138,7 @@ public class OrderItemControllerTests {
     }
 
     @Test
-    public void deleteOrderItem_valuesLessThan1_shouldThrowBadRequest() throws Exception {
+    void deleteOrderItem_valuesLessThan1_shouldThrowBadRequest() throws Exception {
         OrderItemController.OrderItemForm orderItemFormInvalidValues =
                 orderItemFormBody.setOrderId(0).setCustomerId(0).setQuantity(0).setProductId(0);
 
@@ -153,7 +153,7 @@ public class OrderItemControllerTests {
     }
 
     @Test
-    public void deleteOrderItem_missingFields_shouldThrowBadRequest() throws Exception {
+    void deleteOrderItem_missingFields_shouldThrowBadRequest() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/api/order-items")
                 .content("{}")
@@ -165,7 +165,7 @@ public class OrderItemControllerTests {
     }
 
     @Test
-    public void deleteOrderItem_missingOrderIdField_shouldThrowBadRequest() throws Exception {
+    void deleteOrderItem_missingOrderIdField_shouldThrowBadRequest() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/api/order-items")
                 .content("{\"customerId\":1,\"productId\":1,\"quantity\":1}")
@@ -177,7 +177,7 @@ public class OrderItemControllerTests {
     }
 
     @Test
-    public void createOrderItem_validOrderItem_shouldBeCreated() throws Exception {
+    void createOrderItem_validOrderItem_shouldBeCreated() throws Exception {
         OrderItemController.OrderItemForm orderItemFormThirdValid =
                 orderItemFormBody.setOrderId(1L).setCustomerId(1).setQuantity(1).setProductId(3);
 
@@ -193,7 +193,7 @@ public class OrderItemControllerTests {
     }
 
     @Test
-    public void createOrderItem_wrongCustomerId_shouldThrowForbidden() throws Exception {
+    void createOrderItem_wrongCustomerId_shouldThrowForbidden() throws Exception {
         OrderItemController.OrderItemForm orderItemFormWrongCustomerId = orderItemFormBody.setCustomerId(2);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
@@ -208,7 +208,7 @@ public class OrderItemControllerTests {
     }
 
     @Test
-    public void createOrderItem_notNewOrderStatus_shouldThrowBadRequest() throws Exception {
+    void createOrderItem_notNewOrderStatus_shouldThrowBadRequest() throws Exception {
         order.setStatus(OrderStatus.DELIVERED.name());
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
@@ -223,7 +223,7 @@ public class OrderItemControllerTests {
     }
 
     @Test
-    public void createOrderItem_existingOrderItem_shouldThrowBadRequest() throws Exception {
+    void createOrderItem_existingOrderItem_shouldThrowBadRequest() throws Exception {
         OrderItemController.OrderItemForm orderItemFormExistingOrderItem = orderItemFormBody.setProductId(1L);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders

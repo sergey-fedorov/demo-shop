@@ -21,7 +21,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @WireMockTest(httpPort = 8181)
 @Testcontainers
-public class EmailValidatorServiceIntegrationTests {
+class EmailValidatorServiceIntegrationTests {
 
     /* How to run without DB connection, like CustomerController?
     Using @WebMvcTest(CustomerController.class) triggers error with context */
@@ -44,7 +44,7 @@ public class EmailValidatorServiceIntegrationTests {
     }
 
     @Test
-    public void shouldReturnValidationResponseSuccess() throws Exception {
+    void shouldReturnValidationResponseSuccess() throws Exception {
         EmailValidatorDto expectedRes = EmailValidatorDto.builder()
                 .format(true)
                 .domain("example.com")
@@ -62,7 +62,7 @@ public class EmailValidatorServiceIntegrationTests {
     }
 
     @Test
-    public void shouldReturnValidationResponseWrongFormat() throws Exception {
+    void shouldReturnValidationResponseWrongFormat() throws Exception {
         EmailValidatorDto expectedRes = EmailValidatorDto.builder()
                 .format(false)
                 .build();
@@ -77,7 +77,7 @@ public class EmailValidatorServiceIntegrationTests {
     }
 
     @Test
-    public void shouldReturnValidationResponseDisposable() throws Exception {
+    void shouldReturnValidationResponseDisposable() throws Exception {
         EmailValidatorDto expectedRes = EmailValidatorDto.builder()
                 .format(true)
                 .domain("mailinator.com")
@@ -94,7 +94,7 @@ public class EmailValidatorServiceIntegrationTests {
     }
 
     @Test
-    public void shouldReturnValidationResponseWrongDns() throws Exception {
+    void shouldReturnValidationResponseWrongDns() throws Exception {
         EmailValidatorDto expectedRes = EmailValidatorDto.builder()
                 .format(true)
                 .domain("123.com")
@@ -112,7 +112,7 @@ public class EmailValidatorServiceIntegrationTests {
     }
 
     @Test
-    public void shouldThrowEmailValidatorServiceException_Not2xx() throws Exception {
+    void shouldThrowEmailValidatorServiceException_Not2xx() throws Exception {
         stubFor(get(urlMatching("/api/email/.*"))
                 .willReturn(serverError()
                 )
@@ -123,7 +123,7 @@ public class EmailValidatorServiceIntegrationTests {
     }
 
     @Test
-    public void shouldThrowEmailValidatorServiceTimeoutException() throws Exception {
+    void shouldThrowEmailValidatorServiceTimeoutException() throws Exception {
         stubFor(get(urlMatching("/api/email/.*"))
                 .willReturn(ok()
                         .withFixedDelay(3500)

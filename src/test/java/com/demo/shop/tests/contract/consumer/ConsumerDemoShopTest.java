@@ -17,7 +17,7 @@ import static io.restassured.RestAssured.given;
 
 @PactConsumerTest
 @PactDirectory("src/test/resources/pacts")
-public class ConsumerDemoShopTest {
+class ConsumerDemoShopTest {
 
     String validEmail = "email@gmail.com";
 

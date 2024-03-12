@@ -15,7 +15,7 @@ import java.time.Duration;
 public class EmailValidatorService {
 
     @Value("${email.validator.service}")
-    private String emailValidatorService;
+    private String emailValidatorServiceUrl;
 
     public EmailValidatorDto request(String email){
         RestTemplate restTemplate = new RestTemplateBuilder()
@@ -26,7 +26,7 @@ public class EmailValidatorService {
         ResponseEntity<EmailValidatorDto> validationResponse;
 
         try {
-            validationResponse = restTemplate.getForEntity(emailValidatorService + "/api/email/" + email, EmailValidatorDto.class);
+            validationResponse = restTemplate.getForEntity(emailValidatorServiceUrl + "/api/email/" + email, EmailValidatorDto.class);
         } catch (HttpServerErrorException httpException) {
             throw new EmailValidatorException("Email validation request failed: " + httpException.getMessage());
         } catch (Exception e) {

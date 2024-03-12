@@ -13,13 +13,13 @@ import org.springframework.http.HttpStatus;
 import static com.demo.shop.core.Validator.then_validateErrorResponse;
 import static com.demo.shop.core.Validator.then_validateStatusCode;
 
-public class CustomerTests extends BaseTest {
+class CustomerTests extends BaseTest {
 
     Faker faker = new Faker();
     CustomerSteps customerSteps = new CustomerSteps();
 
     @Test
-    public void newCustomerCreatedWithValidDetails(){
+    void newCustomerCreatedWithValidDetails(){
         CustomerModel customerReqBody = CustomerModel.getFake();
 
         CustomerModel customerResBody = customerSteps.when_createCustomer(customerReqBody);
@@ -31,7 +31,7 @@ public class CustomerTests extends BaseTest {
     }
 
     @Test
-    public void cannotCreateCustomerWithEmptyFields(){
+    void cannotCreateCustomerWithEmptyFields(){
         CustomerModel customerReqBody = CustomerModel.getFake()
                 .setFullName("");
         customerSteps.when_createCustomer(customerReqBody);
@@ -49,7 +49,7 @@ public class CustomerTests extends BaseTest {
     }
 
     @Test
-    public void cannotCreateCustomerWithExistingEmail(){
+    void cannotCreateCustomerWithExistingEmail(){
         CustomerModel customerReqBody = CustomerModel.getFake();
         customerSteps.when_createCustomer(customerReqBody);
         customerSteps.when_createCustomer(customerReqBody);
@@ -62,7 +62,7 @@ public class CustomerTests extends BaseTest {
             "test@mailinator.com,Email address is disposable",
             "test@123.com,Email address is not valid"
     })
-    public void cannotCreateCustomerWithInvalidEmail(String email, String message){
+    void cannotCreateCustomerWithInvalidEmail(String email, String message){
         CustomerModel customerReqBody = CustomerModel.builder()
                 .fullName(faker.name().fullName())
                 .address(faker.internet().emailAddress())

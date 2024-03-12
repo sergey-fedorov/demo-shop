@@ -113,7 +113,7 @@ public class OrderController {
         List<OrderItemDto> list = orderItemDtos
                 .stream()
                 .filter(op -> Objects.isNull(productService.getProduct(op.getProductId())))
-                .collect(Collectors.toList());
+                .toList();
 
         if (!CollectionUtils.isEmpty(list)) {
             throw new ResourceNotFoundException("Product not found");

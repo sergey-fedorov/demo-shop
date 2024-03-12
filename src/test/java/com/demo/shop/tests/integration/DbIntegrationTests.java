@@ -20,7 +20,7 @@ import java.time.temporal.ChronoUnit;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
-public class DbIntegrationTests {
+class DbIntegrationTests {
 
     @Autowired
     CustomerRepository customerRepository;
@@ -43,7 +43,7 @@ public class DbIntegrationTests {
 
 
     @Test
-    public void shouldSaveAndFetchCustomer() {
+    void shouldSaveAndFetchCustomer() {
         Customer customer = Customer.builder().email("testname@email.com").address("City").fullName("Test Name").build();
         Long customerId = customerRepository.save(customer).getId();
         Assertions.assertEquals(
@@ -53,7 +53,7 @@ public class DbIntegrationTests {
     }
 
     @Test
-    public void shouldSaveAndFetchProduct() {
+    void shouldSaveAndFetchProduct() {
         Product product = Product.builder().name("Test product").price(5.0).pictureUrl("product.png").build();
         Long productId = productRepository.save(product).getId();
         Assertions.assertEquals(
@@ -63,7 +63,7 @@ public class DbIntegrationTests {
     }
 
     @Test
-    public void shouldSaveAndFetchOrder() {
+    void shouldSaveAndFetchOrder() {
         LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Customer customer = Customer.builder().email("testname2@email.com").address("City").fullName("Test Name").build();
         Customer customerRecord = customerRepository.save(customer);
@@ -79,7 +79,7 @@ public class DbIntegrationTests {
     }
 
     @Test
-    public void shouldSaveAndFetchOrderItem() {
+    void shouldSaveAndFetchOrderItem() {
         Customer customer = Customer.builder().email("testname3@email.com").address("City").fullName("Test Name").build();
         Customer customerRecord = customerRepository.save(customer);
         Product product = Product.builder().name("Test product").price(5.0).pictureUrl("product.png").build();
@@ -97,7 +97,7 @@ public class DbIntegrationTests {
     }
 
     @Test
-    public void shouldNotSaveOrder_MissingCustomer_CustomerIdFKConstraint() {
+    void shouldNotSaveOrder_MissingCustomer_CustomerIdFKConstraint() {
         Long customerId = 999L;
         Customer customer = Customer.builder().id(customerId).build();
         Order order = Order.builder().dateCreated(LocalDateTime.now()).customer(customer).status("NEW").build();
@@ -108,7 +108,7 @@ public class DbIntegrationTests {
     }
 
     @Test
-    public void shouldNotSaveOrderItem_MissingProduct_ProductIdFKConstraint() {
+    void shouldNotSaveOrderItem_MissingProduct_ProductIdFKConstraint() {
         Long productId = 999L;
         Customer customer = Customer.builder().email("testname4@email.com").address("City").fullName("Test Name").build();
         Customer customerRecord = customerRepository.save(customer);
@@ -125,7 +125,7 @@ public class DbIntegrationTests {
 
 
     @Test
-    public void shouldNotSaveCustomer_ExistingCustomer_DuplicateEntry() {
+    void shouldNotSaveCustomer_ExistingCustomer_DuplicateEntry() {
         Customer customerOne = Customer.builder().email("testname5@email.com").address("City").fullName("Test Name").build();
         Customer customerTwo = Customer.builder().email("testname5@email.com").address("City").fullName("Test Name").build();
         customerRepository.save(customerOne);

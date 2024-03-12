@@ -14,7 +14,7 @@ import java.net.URL;
 
 @Provider("emailValidator_provider")
 @PactFolder("src/test/resources/pacts")
-public class ProviderEmailValidatorServiceTest {
+class ProviderEmailValidatorServiceTest {
 
     @BeforeEach
     void before(PactVerificationContext context) throws MalformedURLException {

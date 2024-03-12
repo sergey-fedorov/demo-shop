@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(CustomerController.class)
-public class CustomerControllerTests {
+class CustomerControllerTests {
 
     /* @WebMvcTest is limited to a single controller and is used in combination
      with @MockBean to provide mock implementations for required collaborators.
@@ -53,7 +53,7 @@ public class CustomerControllerTests {
     /* getCustomer */
 
     @Test
-    public void shouldReturnCustomerDetails() throws Exception {
+    void shouldReturnCustomerDetails() throws Exception {
         when(customerService.get(anyLong())).thenReturn(customer);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
@@ -69,7 +69,7 @@ public class CustomerControllerTests {
     }
 
     @Test
-    public void shouldTrowBadRequest_WrongPathParameterType() throws Exception {
+    void shouldTrowBadRequest_WrongPathParameterType() throws Exception {
         when(customerService.get(anyLong())).thenReturn(customer);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
@@ -82,7 +82,7 @@ public class CustomerControllerTests {
     }
 
     @Test
-    public void shouldTrowBadRequest_PathParameterLessOrZero() throws Exception {
+    void shouldTrowBadRequest_PathParameterLessOrZero() throws Exception {
         when(customerService.get(anyLong())).thenReturn(customer);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
@@ -96,7 +96,7 @@ public class CustomerControllerTests {
 
 
     @Test
-    public void shouldTrowResourceNotFound_MissingCustomer() throws Exception {
+    void shouldTrowResourceNotFound_MissingCustomer() throws Exception {
         when(customerService.get(anyLong())).thenThrow(ResourceNotFoundException.class);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
@@ -110,7 +110,7 @@ public class CustomerControllerTests {
     /* createCustomer */
 
     @Test
-    public void shouldCreateNewCustomer() throws Exception {
+    void shouldCreateNewCustomer() throws Exception {
         EmailValidatorDto emailValidatorDto = EmailValidatorDto.builder()
                 .format(true)
                 .domain("example.com")
@@ -136,7 +136,7 @@ public class CustomerControllerTests {
     }
 
     @Test
-    public void shouldTrowBadRequest_EmailHasWrongFormat() throws Exception {
+    void shouldTrowBadRequest_EmailHasWrongFormat() throws Exception {
         EmailValidatorDto emailValidatorDto = EmailValidatorDto.builder()
                 .format(false)
                 .build();
@@ -154,7 +154,7 @@ public class CustomerControllerTests {
     }
 
     @Test
-    public void shouldTrowBadRequest_EmailIsDisposable() throws Exception {
+    void shouldTrowBadRequest_EmailIsDisposable() throws Exception {
         EmailValidatorDto emailValidatorDto = EmailValidatorDto.builder()
                 .format(true)
                 .domain("example.com")
@@ -175,7 +175,7 @@ public class CustomerControllerTests {
     }
 
     @Test
-    public void shouldTrowBadRequest_EmailIsInvalid() throws Exception {
+    void shouldTrowBadRequest_EmailIsInvalid() throws Exception {
         EmailValidatorDto emailValidatorDto = EmailValidatorDto.builder()
                 .format(true)
                 .domain("example.com")

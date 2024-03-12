@@ -41,8 +41,8 @@ public class Order {
     @Transient
     public Double getTotalOrderPrice() {
         double sum = 0D;
-        List<OrderItem> orderItems = getOrderItems();
-        for (OrderItem op : orderItems) {
+        List<OrderItem> oItems = getOrderItems();
+        for (OrderItem op : oItems) {
             sum += op.getTotalPrice();
         }
         return Double.valueOf(new DecimalFormat("#.##").format(sum));

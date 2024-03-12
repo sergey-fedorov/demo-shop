@@ -23,7 +23,7 @@ import static io.restassured.RestAssured.given;
 
 @PactConsumerTest
 @PactDirectory("src/test/resources/pacts")
-public class ConsumerDeliveryServiceTest {
+class ConsumerDeliveryServiceTest {
 
     @BeforeAll
     static void setup(){

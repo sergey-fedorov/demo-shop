@@ -35,7 +35,7 @@ import java.util.Map;
 @Provider("orders_provider")
 @PactFolder("src/test/resources/pacts")
 @Testcontainers
-public class ProviderOrdersServiceTest {
+class ProviderOrdersServiceTest {
 
    /* Using running service with mysql testcontainer */
 

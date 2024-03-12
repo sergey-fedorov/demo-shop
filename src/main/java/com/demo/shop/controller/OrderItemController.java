@@ -33,7 +33,7 @@ public class OrderItemController {
     private ProductService productService;
 
     @DeleteMapping
-    public ResponseEntity<?> deleteOrderItem(@Valid @RequestBody OrderItemForm orderItemForm){
+    public ResponseEntity<Void> deleteOrderItem(@Valid @RequestBody OrderItemForm orderItemForm){
         Order order = orderService.get(orderItemForm.getOrderId());
 
         Long orderOwnerCustomerId = order.getCustomer().getId();

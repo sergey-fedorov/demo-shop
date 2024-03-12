@@ -55,7 +55,7 @@ public class DemoShopServiceTests {
 
 
     @Test
-    public void newCustomerCreatedWithValidDetails() {
+    void newCustomerCreatedWithValidDetails() {
         CustomerModel customerReqBody = CustomerModel.getFake();
 
         CustomerModel customerResBody = customerSteps.when_createCustomer(customerReqBody);
@@ -67,7 +67,7 @@ public class DemoShopServiceTests {
     }
 
     @Test
-    public void statusShouldBeChangedFromNewToSucceededToDelivered(){
+    void statusShouldBeChangedFromNewToSucceededToDelivered(){
         Long customerId = customerSteps.when_getAnyCustomer().getId();
         Long productId = productSteps.when_getAnyProduct().getId();
 
